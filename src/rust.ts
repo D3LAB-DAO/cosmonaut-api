@@ -9,8 +9,9 @@ const rust = {
     fmt: rustfmt
 }
 
-// echo "fn main(){println!(\"test function\");}"|rustfmt
+// TODO: Need to make error handling when raw is not rust code
 function rustfmt(raw: base64): Promise<base64> {
+    // echo "fn main(){println!(\"test function\");}"|rustfmt
     const b64ToStr = Buffer.from(raw, 'base64').toString('utf-8')
     let subprocess = spawn("rustfmt")
     subprocess.stdin.write(b64ToStr)
