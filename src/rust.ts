@@ -28,7 +28,9 @@ function rustfmt(raw: base64): Promise<base64> {
         });
 
         subprocess.stderr.on('data', (err) => {
-            reject(err);
+            if (err instanceof Buffer) {
+                reject(err.toString('base64'));
+            }
         })
 
     })

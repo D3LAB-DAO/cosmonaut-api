@@ -23,7 +23,7 @@ codeFmtBtn.addEventListener("click", async (e) => {
     if (res.code === "success") {
         wasmCode.value = atob(res.result);
     } else if (res.code === "fail") {
-        let bufToErr = String.fromCharCode(...res.result.data);
+        let bufToErr = atob(res.result);
         editorWarn.innerText = bufToErr;
     }
 })
