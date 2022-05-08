@@ -8,14 +8,18 @@
 </head>
 <body>
 
-<p style="text-align: center; font-size: 50px">wasm api test</p>
-<form action="" id="wasm-editor-form">
-    <p><label for="wasm-editor">Enter your code:</label></p>
-    <textarea id="wasm-editor" name="wasm-editor-content" rows="25" cols="60">fn main(){println!("test function");}</textarea>
-    <br>
-    <button id="run-code">Run</button>
-    <button id="format-code" style="margin-left: 2em">Rustfmt</button>
-</form>
+<h1 style="text-align: center;">wasm api test</h1>
+<section>
+    <p id="wasm-editor-error" style="border: 4px solid blueviolet;">Error here!</p>
+    <form action="" id="wasm-editor-form">
+        <p><label for="wasm-editor">Enter your code:</label></p>
+        <textarea id="wasm-editor" name="wasm-editor-content" rows="25"
+                  cols="60">fn main(){println!("test function");}</textarea>
+        <br>
+        <button id="run-code">Run</button>
+        <button id="format-code" style="margin-left: 2em">Rustfmt</button>
+    </form>
+</section>
 
 <script type="text/javascript" src="./app.js"></script>
 </body>

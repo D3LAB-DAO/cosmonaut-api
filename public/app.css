@@ -4,6 +4,14 @@
 
 #wasm-editor-form {
     width: auto;
-    margin: auto;
+    margin: auto 5em;
     border: 2px solid red;
+    float: right;
+}
+
+#wasm-editor-error {
+    width: 40em;
+    margin-left: 10em;
+    text-align: center;
+    font-size: 20px;
 }
