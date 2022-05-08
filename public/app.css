@@ -1,0 +1,9 @@
+#wasm-editor {
+    font-size: 20px;
+}
+
+#wasm-editor-form {
+    width: auto;
+    margin: auto;
+    border: 2px solid red;
+}
