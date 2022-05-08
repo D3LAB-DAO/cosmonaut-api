@@ -13,8 +13,18 @@ router.route('/fmt')
     })
     .post(async (req, res) => {
         // console.log(Buffer.from(fmtCode, 'base64').toString('utf-8'));
+        try {
         let fmtCode = await rust.fmt(req.body);
-        res.send(fmtCode);
+        res.send({
+            code: "success",
+            result: fmtCode
+        });
+        } catch(err) {
+            res.send({
+                code: "fail",
+                result: err
+            })
+        }
     })
 
 export default router

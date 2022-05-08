@@ -16,7 +16,7 @@ function rustfmt(raw: base64): Promise<base64> {
     let subprocess = spawn("rustfmt")
     subprocess.stdin.write(b64ToStr)
     subprocess.stdin.end()
-    return new Promise((resolve, _) => {
+    return new Promise((resolve, reject) => {
         subprocess.stdout.on('data', (data) => {
             if (data instanceof Buffer) {
                 const cmp_str = "fn main() {\n" +
@@ -25,7 +25,12 @@ function rustfmt(raw: base64): Promise<base64> {
                 console.log("Formatting result is ", data.toString() === cmp_str)
                 resolve(data.toString('base64'))
             }
+        });
+
+        subprocess.stderr.on('data', (err) => {
+            reject(err);
         })
+
     })
 }
 
