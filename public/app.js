@@ -18,12 +18,11 @@ codeFmtBtn.addEventListener("click", async (e) => {
         },
         body: btoa(wasmCode.value),
     }
-    let res = await fetch('http://127.0.0.1:3000/fmt', opt);
+    let res = await fetch('http://127.0.0.1:3000/rust/fmt', opt);
     res = await res.json();
     if (res.code === "success") {
         wasmCode.value = atob(res.result);
     } else if (res.code === "fail") {
-        let bufToErr = atob(res.result);
-        editorWarn.innerText = bufToErr;
+        editorWarn.innerText = atob(res.result);
     }
 })
