@@ -19,10 +19,6 @@ function rustfmt(raw: base64): Promise<base64> {
     return new Promise((resolve, reject) => {
         subprocess.stdout.on('data', (data) => {
             if (data instanceof Buffer) {
-                const cmp_str = "fn main() {\n" +
-                    "    println!(\"test function\");\n" +
-                    "}\n"
-                console.log("Formatting result is ", data.toString() === cmp_str)
                 resolve(data.toString('base64'))
             }
         });
