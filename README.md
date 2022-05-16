@@ -1,5 +1,14 @@
-# Test
+# Run
 ```bash
-npx ts-jest config:init
-npm test [-- --verbose]
+npm start
+```
+
+# .env
+```
+PORT = 63342
+```
+
+# API
+```
+POST /rust/fmt
 ```
