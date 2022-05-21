@@ -1,8 +1,8 @@
 import {Request, Response} from "express";
-import {fmtCodes} from "routes/rust"
-import {base64} from "internal/type"
+import {fmtCodes} from "@d3lab/routes/rust";
+import {base64} from "@d3lab/internal/type";
 
-describe("Test all API endpoints",
+describe("Test /rust/* API endpoints",
     () => {
         let mockReq: Partial<Request>;
         let mockRes: Partial<Response>;

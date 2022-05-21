@@ -1,4 +1,4 @@
-import rust from 'internal/rust'
+import rust from '@d3lab/internal/rust';
 
 describe("rustfmt test", () => {
     test("with correct rust code",

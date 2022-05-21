@@ -2,6 +2,7 @@
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
-  rootDir: './src',
-  moduleDirectories: ["node_modules", "src"]
+  moduleNameMapper: {
+    '^@d3lab/(.*)$': '<rootDir>/src/$1',
+  }
 };

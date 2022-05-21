@@ -1,6 +1,6 @@
-import {Request, Response} from "express"
-import rust from "internal/rust";
-import {base64} from "internal/type"
+import {Request, Response} from "express";
+import rust from "@d3lab/internal/rust";
+import {base64} from "@d3lab/internal/type";
 
 const fmtCodes = async (req: Request, res: Response) => {
     try {
@@ -23,8 +23,8 @@ const fmtCodes = async (req: Request, res: Response) => {
             result: err
         })
     }
-}
+};
 
 export {
     fmtCodes
-}
+};

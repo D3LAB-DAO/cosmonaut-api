@@ -1,7 +1,7 @@
-import {Server} from 'http'
-import 'dotenv/config'
+import {Server} from 'http';
+import 'dotenv/config';
 
-import app from "./app"
+import app from "./app";
 
 let server: Server;
 async function init() {

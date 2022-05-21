@@ -1,6 +1,6 @@
-import express from 'express'
-import {fmtCodes} from './handle'
-const router = express.Router()
+import express from 'express';
+import {fmtCodes} from './handle';
+const router = express.Router();
 
 router.route('/fmt')
     .get((req, res) => {
@@ -8,5 +8,5 @@ router.route('/fmt')
     })
     .post(fmtCodes)
 
-export default router
-export * from './handle'
+export default router;
+export * from './handle';
