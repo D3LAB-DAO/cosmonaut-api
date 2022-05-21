@@ -1,18 +1,17 @@
-import {rust} from '../src/rust'
+import rust from 'internal/rust'
 
 describe("rustfmt test", () => {
     test("with correct rust code",
         async () => {
             const targetCode: string = "fn main(){println!(\"test function\");}"
             const encodedData = Buffer.from(targetCode, "utf-8").toString('base64'); // encode a string
-
             try {
                 let res = await rust.fmt(encodedData)
                 res = Buffer.from(res, 'base64').toString('utf-8')
-                const cmp_str = "fn main() {\n" +
+                const cmpStr = "fn main() {\n" +
                     "    println!(\"test function\");\n" +
                     "}\n"
-                expect(res).toBe(cmp_str)
+                expect(res).toBe(cmpStr)
             } catch (err) {
                 if (err instanceof Buffer) {
                     err = err.toString()
@@ -38,7 +37,4 @@ describe("rustfmt test", () => {
 
         })
 })
-
-
-
 
