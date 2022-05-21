@@ -1,15 +1,6 @@
 import {spawn} from "child_process"
+import {base64} from "../type"
 
-type base64 = string
-
-const rust = {
-    build: (): string => {
-        return "I am rust build function"
-    },
-    fmt: rustfmt
-}
-
-// TODO: Need to make error handling when raw is not rust code
 function rustfmt(raw: base64): Promise<base64> {
     // echo "fn main(){println!(\"test function\");}"|rustfmt
     const b64ToStr = Buffer.from(raw, 'base64').toString('utf-8')
@@ -32,6 +23,9 @@ function rustfmt(raw: base64): Promise<base64> {
     })
 }
 
-export {
-    rust
+export default {
+    build: (): string => {
+        return "I am rust build function"
+    },
+    fmt: rustfmt
 }

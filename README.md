@@ -15,7 +15,7 @@ _Request_
 ```http request
 POST /rust/fmt HTTP/1.1
 Host: localhost:3000
-Content-Type: text/plain
+Content-Type: application/json
 
 target_rust_code_encoded_with_base64
 ```
