@@ -7,10 +7,15 @@
     "test": "jest",
     "cover": "jest --coverage",
     "start": "ts-node src/index.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "prepare": "husky install"
   },
   "keywords": [],
-  "author": "",
+  "author": "Jayden Lee",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/D3LAB-DAO/cosmonaut-api.git"
+  },
   "license": "ISC",
   "devDependencies": {
     "@types/cors": "^2.8.12",
@@ -18,6 +23,7 @@
     "@types/jest": "^27.5.1",
     "@types/node": "^17.0.31",
     "axios": "^0.27.2",
+    "husky": "^8.0.1",
     "jest": "^28.1.0",
     "ts-jest": "^28.0.2",
     "ts-node": "^10.7.0",
