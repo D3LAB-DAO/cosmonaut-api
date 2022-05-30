@@ -14,14 +14,16 @@ codeFmtBtn.addEventListener("click", async (e) => {
     const opt = {
         method: 'POST',
         headers: {
-            'Content-Type': 'text/plain'
+            'Content-Type': 'application/json'
         },
-        body: btoa(wasmCode.value),
+        body: JSON.stringify({
+            file1: btoa(wasmCode.value)
+        }),
     }
     let res = await fetch('http://127.0.0.1:3000/rust/fmt', opt);
     res = await res.json();
     if (res.code === "success") {
-        wasmCode.value = atob(res.result);
+        wasmCode.value = atob(res.result.file1);
     } else if (res.code === "fail") {
         editorWarn.innerText = atob(res.result);
     }

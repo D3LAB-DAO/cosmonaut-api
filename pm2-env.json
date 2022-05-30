@@ -1,0 +1,18 @@
+{
+  "apps": [
+    {
+      "name": "cosmonaut-api",
+      "script": "dist/src/index.js",
+      "node_args": "-r tsconfig-paths/register",
+      "watch": false,
+      "env_production": {
+        "NODE_ENV": "production",
+        "TS_NODE_BASEURL": "./dist",
+        "PORT": 3000
+      },
+      "env_development": {
+        "NODE_ENV": "development"
+      }
+    }
+  ]
+}
