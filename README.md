@@ -8,7 +8,7 @@ npm start
 
 ```
 PORT=3000
-MODE=development
+NODE_ENV=development
 ```
 
 # API
