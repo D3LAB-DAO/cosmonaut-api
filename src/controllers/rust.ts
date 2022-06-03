@@ -1,23 +1,21 @@
 import {Request, Response} from "express";
-import rust from "@d3lab/internal/rust";
-import {base64} from "@d3lab/internal/type";
+import {rust} from "@d3lab/services";
+import {FmtFiles} from "@d3lab/types";
 
 const fmtCodes = async (req: Request, res: Response) => {
     try {
-        interface FmtFiles {
-            [key: string]: base64
-        }
+
         const beforeFmtFiles: FmtFiles = req.body;
         const afterFmtFiles: FmtFiles = {};
         for (let [key, value] of Object.entries(beforeFmtFiles)) {
-            afterFmtFiles[key] = await rust.fmt(value);
+            afterFmtFiles[key] = await rust.rustfmt(value);
         }
 
         res.send({
             code: "success",
             result: afterFmtFiles
         });
-    } catch(err) {
+    } catch (err) {
         res.send({
             code: "fail",
             result: err

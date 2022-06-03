@@ -11,7 +11,7 @@ const ERROR_LOG_PATH = process.env.NODE_ENV == 'production' ?
     path.join(__dirname, '..', '..', LOG_ROOT, 'prod', 'error') :
     path.join(__dirname, '..', '..', LOG_ROOT, 'dev', 'error');
 
-const { combine, timestamp, printf } = winston.format
+const {combine, timestamp, printf} = winston.format
 const logFormat = printf(info => {
     return `${info.timestamp} [${info.level}] ${info.message}`
 })
@@ -34,7 +34,7 @@ const opLogger = winston.createLogger({
     ]
 })
 
-if (process.env.NODE_ENV === 'development'){
+if (process.env.NODE_ENV === 'development') {
     opLogger.add(new winston.transports.Console({
         format: winston.format.combine(
             winston.format.colorize(),

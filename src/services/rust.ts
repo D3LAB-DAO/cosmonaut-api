@@ -1,5 +1,5 @@
 import {spawn} from "child_process";
-import {base64} from "../type";
+import {base64} from "../types";
 
 function rustfmt(raw: base64): Promise<base64> {
     // echo "fn main(){println!(\"test function\");}"|rustfmt
@@ -23,9 +23,11 @@ function rustfmt(raw: base64): Promise<base64> {
     })
 }
 
-export default {
-    build: (): string => {
-        return "I am rust build function"
-    },
-    fmt: rustfmt
+const build = (): string => {
+    return "I am rust build function"
+}
+
+export {
+    build,
+    rustfmt
 };

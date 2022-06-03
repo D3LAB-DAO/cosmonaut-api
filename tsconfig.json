@@ -4,22 +4,27 @@
     "moduleResolution": "node",
     "module": "commonjs",
     "target": "es2021",
-    "lib": ["es2021"],
-
+    "lib": [
+      "es2021"
+    ],
     "esModuleInterop": true,
     "strict": true,
     "skipLibCheck": true,
     "downlevelIteration": true,
     "importHelpers": true,
     "forceConsistentCasingInFileNames": true,
-
     "outDir": "dist",
     "removeComments": true,
     "sourceMap": true,
     "baseUrl": ".",
     "paths": {
-      "@d3lab/*": ["src/*"]
+      "@d3lab/*": [
+        "src/*"
+      ]
     }
   },
-  "include": ["src/**/*", "tests/**/*"]
+  "include": [
+    "src/**/*",
+    "tests/**/*"
+  ]
 }

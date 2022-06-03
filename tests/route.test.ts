@@ -1,6 +1,6 @@
 import {Request, Response} from "express";
-import {fmtCodes} from "@d3lab/routes/rust";
-import {base64} from "@d3lab/internal/type";
+import {rust} from "@d3lab/controllers";
+import {base64} from "@d3lab/types";
 
 describe("Test /rust/* API endpoints",
     () => {
@@ -63,7 +63,7 @@ describe("Test /rust/* API endpoints",
                         file2: encodedCmpStr2
                     }
                 }
-                await fmtCodes(mockReq as Request, mockRes as Response);
+                await rust.fmtCodes(mockReq as Request, mockRes as Response);
 
                 expect(resObj).toEqual(expectedRes)
 
