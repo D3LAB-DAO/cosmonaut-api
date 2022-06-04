@@ -2,6 +2,8 @@
 
 ```bash
 npm start
+
+docker build -t cosmo-rust:1.0 .
 ```
 
 # .env

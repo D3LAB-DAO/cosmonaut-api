@@ -1,11 +1,13 @@
 import {spawn} from "child_process";
 import {base64} from "../types";
 
+const b64ToStr = (raw: base64): string => {
+    return Buffer.from(raw, 'base64').toString('utf-8')
+}
+
 function rustfmt(raw: base64): Promise<base64> {
-    // echo "fn main(){println!(\"test function\");}"|rustfmt
-    const b64ToStr = Buffer.from(raw, 'base64').toString('utf-8')
     let subprocess = spawn("rustfmt")
-    subprocess.stdin.write(b64ToStr)
+    subprocess.stdin.write(b64ToStr(raw))
     subprocess.stdin.end()
     return new Promise((resolve, reject) => {
         subprocess.stdout.on('data', (data) => {
