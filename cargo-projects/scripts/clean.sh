@@ -20,8 +20,8 @@ while true; do
   esac
 done
 
-if [[ -d "${TARGET_PATH}" ]]; then
-  echo "** This lesson is already initiated **"
+if ! [[ -d "${TARGET_PATH}" ]]; then
+  echo "** This lesson has never been initiated **"
 else
-  mkdir -p "${TARGET_PATH}" && cargo init --vcs none "${TARGET_PATH}"
+  cargo clean --manifest-path "${TARGET_PATH}/Cargo.toml"
 fi

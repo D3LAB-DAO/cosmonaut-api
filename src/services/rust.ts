@@ -1,11 +1,11 @@
 import {spawn} from "child_process";
-import {base64} from "../types";
+import {Base64} from "@d3lab/types";
 
-const b64ToStr = (raw: base64): string => {
+const b64ToStr = (raw: Base64): string => {
     return Buffer.from(raw, 'base64').toString('utf-8')
 }
 
-function rustfmt(raw: base64): Promise<base64> {
+function rustfmt(raw: Base64): Promise<Base64> {
     let subprocess = spawn("rustfmt")
     subprocess.stdin.write(b64ToStr(raw))
     subprocess.stdin.end()
@@ -25,11 +25,30 @@ function rustfmt(raw: base64): Promise<base64> {
     })
 }
 
-const build = (): string => {
-    return "I am rust build function"
+function cosmRun(cmd: string, owner: string, proj: string, lecture: string): Promise<string> {
+    let subprocess = spawn("make", [cmd, `OWENR=${owner}`, `PROJ=${proj}`, `LEC=${lecture}`])
+    return new Promise((resolve, reject) => {
+        subprocess.stdout.on('data', (data) => {
+            if (data instanceof Buffer) {
+                resolve(data.toString())
+            }
+        });
+
+        subprocess.stderr.on('data', (err) => {
+            if (err instanceof Buffer) {
+                reject(err.toString());
+            }
+        })
+
+        subprocess.on('close', (code) => {
+            console.log(`child process exited with code ${code}`);
+            resolve("close without stdout & stderr")
+        })
+
+    })
 }
 
 export {
-    build,
+    cosmRun,
     rustfmt
 };

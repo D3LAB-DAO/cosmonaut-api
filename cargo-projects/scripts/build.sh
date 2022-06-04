@@ -15,7 +15,6 @@ while true; do
     shift 2
     ;;
   --check)
-    echo -e "** Use Clippy to catch common mistakes **\n"
     CLIPPY=true
     shift 1
     ;;
@@ -27,7 +26,8 @@ while true; do
 done
 
 if [[ $CLIPPY == "true" ]]; then
-  cargo clippy --manifest-path "${TARGET_PATH}/Cargo.toml" 2>&1
+#  cargo clippy --manifest-path "${TARGET_PATH}/Cargo.toml" 2>> "${TARGET_PATH}/error" 1> "${TARGET_PATH}/out"
+  cargo clippy --manifest-path "${TARGET_PATH}/Cargo.toml" > "${TARGET_PATH}/debug" 2>&1
 else
-  cargo run --manifest-path "${TARGET_PATH}/Cargo.toml" 2>&1
+  cargo run --manifest-path "${TARGET_PATH}/Cargo.toml" 2>"${TARGET_PATH}/debug"
 fi
