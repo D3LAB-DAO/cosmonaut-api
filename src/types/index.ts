@@ -1,10 +1,12 @@
-type base64 = string;
+type Base64 = string;
+type CargoReturn = string | null;
 
 interface FmtFiles {
-    [key: string]: base64
+    [key: string]: Base64
 }
 
 export {
-    base64,
+    Base64,
+    CargoReturn,
     FmtFiles
 };
