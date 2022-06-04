@@ -2,14 +2,16 @@
   "name": "@d3lab/cosmonaut-api",
   "version": "0.1.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
+    "prepare": "husky install",
     "test": "jest",
     "test:cover": "jest --coverage",
-    "start": "ts-node -r tsconfig-paths/register src/index.ts",
     "pm2": "pm2 start pm2-env.json --name cosmonaut-api --env production",
-    "build": "tsc",
-    "prepare": "husky install"
+    "build": "tsc --project tsconfig.prod.json",
+    "start": "ts-node -r tsconfig-paths/register src/index.ts",
+    "cargo": "ts-node -r tsconfig-paths/register src/cargo.ts",
+    "dist-test": "TS_NODE_BASEURL='dist' node -r tsconfig-paths/register dist/src/cargo.js"
   },
   "keywords": [],
   "author": "Jayden Lee",

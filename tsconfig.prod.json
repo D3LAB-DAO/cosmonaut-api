@@ -13,25 +13,19 @@
     "downlevelIteration": true,
     "importHelpers": true,
     "forceConsistentCasingInFileNames": true,
-    "outDir": "dist",
+    "outDir": "dist/src/",
     "removeComments": true,
-    "sourceMap": true,
     "baseUrl": ".",
     "paths": {
       "@d3lab/*": [
         "src/*"
       ]
-    },
-    "typeRoots": [
-      "./node_modules/@types",
-      "./src/types/global.d.ts"
-    ]
+    }
   },
   "include": [
-    "src/**/*",
-    "tests/**/*"
+    "src/**/*"
   ],
   "ts-node": {
-    "files": true
+    "swc": true
   }
 }
