@@ -4,6 +4,7 @@
 npm start
 
 docker build -t cosmo-rust:1.0 .
+make cosm-build OWNER="tkxkd0159" PROJ="ch3" LEC="lesson1"
 ```
 
 # .env

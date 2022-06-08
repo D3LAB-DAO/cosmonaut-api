@@ -26,7 +26,7 @@ function rustfmt(raw: Base64): Promise<Base64> {
 }
 
 function cosmRun(cmd: string, owner: string, proj: string, lecture: string): Promise<string> {
-    let subprocess = spawn("make", [cmd, `OWENR=${owner}`, `PROJ=${proj}`, `LEC=${lecture}`])
+    let subprocess = spawn("make", [cmd, `OWNER=${owner}`, `PROJ=${proj}`, `LEC=${lecture}`])
     return new Promise((resolve, reject) => {
         subprocess.stdout.on('data', (data) => {
             if (data instanceof Buffer) {

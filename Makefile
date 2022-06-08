@@ -2,9 +2,9 @@
 
 
 CONTAINER_NAME ?= "cosmonaut"
-OWNER ?= "tkxkd0159"
-PROJ ?= "ch3"
-LEC ?= "lesson1"
+OWNER =
+PROJ =
+LEC =
 TARGET_PATH = "cosm/$(OWNER)/$(PROJ)/$(LEC)"
 
 cosm-init:

@@ -29,5 +29,5 @@ if [[ $CLIPPY == "true" ]]; then
 #  cargo clippy --manifest-path "${TARGET_PATH}/Cargo.toml" 2>> "${TARGET_PATH}/error" 1> "${TARGET_PATH}/out"
   cargo clippy --manifest-path "${TARGET_PATH}/Cargo.toml" > "${TARGET_PATH}/debug" 2>&1
 else
-  cargo run --manifest-path "${TARGET_PATH}/Cargo.toml" 2>"${TARGET_PATH}/debug"
+  cargo run --manifest-path "${TARGET_PATH}/Cargo.toml" 1>"${TARGET_PATH}/out" 2>"${TARGET_PATH}/debug"
 fi
