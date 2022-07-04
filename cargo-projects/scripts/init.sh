@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if ! options=$(getopt -o '' --long path: -- "$@"); then
+if ! options=$(getopt -o '' --long path:,clean -- "$@"); then
   echo "ERROR: print usage"
   exit 1
 fi
@@ -13,12 +13,23 @@ while true; do
     TARGET_PATH=$2
     shift 2
     ;;
+  --clean)
+    CLEAN_SIG="true"
+    shift 1
+    ;;
   --)
     shift
     break
     ;;
   esac
 done
+
+if [[ $CLEAN_SIG == "true" ]]; then
+  rm -rf "${TARGET_PATH}" && mkdir -p "${TARGET_PATH}" && cargo init --vcs none "${TARGET_PATH}"
+  exit 0
+fi
+
+
 
 if [[ -d "${TARGET_PATH}" ]]; then
   echo "** This lesson is already initiated **"

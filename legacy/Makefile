@@ -12,8 +12,10 @@ cargofmt:
 	cosmo-rust:1.0 bash -c "cargo fmt";
 
 cosm-init:
-	docker run -d --rm -v $(CURDIR)/cargo-projects:/workspace -w /workspace $(DOCKER_IMG) \
-	bash -c "./scripts/init.sh --path $(TARGET_PATH) --clean";
+	@if docker ps -a --format "{{.Names}}" | grep "^$(CONTAINER_NAME)$$" > /dev/null; \
+	then docker exec -w /workspace $(CONTAINER_NAME) bash -c "./scripts/init.sh --path $(TARGET_PATH)"; \
+	else docker run -itd --name $(CONTAINER_NAME) -v $(CURDIR)/cargo-projects:/workspace $(DOCKER_IMG) /bin/bash > /dev/null \
+	&& docker exec -w /workspace $(CONTAINER_NAME) bash -c "./scripts/init.sh --path $(TARGET_PATH)"; fi
 
 cosm-build:
 	@if docker ps -a --format "{{.Names}}" | grep "^$(CONTAINER_NAME)$$" > /dev/null; \
