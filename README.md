@@ -4,7 +4,17 @@
 npm start
 
 docker build -t cosmo-rust:1.0 .
+docker run -it --name jsrust cosmo-rust:1.0
+
 make cosm-build OWNER="tkxkd0159" PROJ="ch3" LEC="lesson1"
+
+npx pm2 list
+```
+
+# Flow
+```
+make cosm-init
+npm run dist-test
 ```
 
 # .env

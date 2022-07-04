@@ -20,6 +20,10 @@ global.MY_CWD = process.cwd();
             });
         }
 
+        const userid = 'tkxkd0159'
+        const lesson = 'lesson1'
+        const chapter = 'ch1'
+        const projPath =  `${userid}/${lesson}/${chapter}`
         try {
             /*
                FIXME: debug 출력메시지는 stderr로 나옴. cliipy나 build 시 오류 발생하면 exit_code: 2
@@ -28,18 +32,18 @@ global.MY_CWD = process.cwd();
                FIXME: cosmRun으로 받아온거 fs로 저장해봤는데도 내용 짤려서 저장됨. 무조건 bash script 안에서 해야 모든 상황에서 잘 작동
            */
             if (process.argv[2] == "clippy") {
-                res = await rust.cosmRun("clippy", "tkxkd0159", "ch3", "lesson1");
-                extracted(MY_CWD, "tkxkd0159/ch3/lesson1", "debug")
+                res = await rust.cosmRun("clippy", userid, lesson, chapter);
+                extracted(MY_CWD, projPath, "debug")
             } else {
-                res = await rust.cosmRun("cosm-build", "tkxkd0159", "ch3", "lesson1");
-                extracted(MY_CWD, "tkxkd0159/ch3/lesson1", "out")
+                res = await rust.cosmRun("cosm-build", userid, lesson, chapter);
+                extracted(MY_CWD, projPath, "out")
                 console.log(res === "Hello, world!\n" + "I am sub func\n")
             }
 
 
         } catch {
             console.log("** exit with non-zero **")
-            extracted(MY_CWD, "tkxkd0159/ch3/lesson1", "debug");
+            extracted(MY_CWD, projPath, "debug");
         }
     }
 )();

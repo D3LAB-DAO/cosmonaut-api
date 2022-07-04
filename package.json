@@ -8,6 +8,7 @@
     "test": "jest",
     "test:cover": "jest --coverage",
     "pm2": "pm2 start pm2-env.json --name cosmonaut-api --env production",
+    "pm2:stop": "pm2 stop cosmonaut-api",
     "build": "tsc --project tsconfig.prod.json",
     "start": "ts-node -r tsconfig-paths/register src/index.ts",
     "cargo": "ts-node -r tsconfig-paths/register src/cargo.ts",
