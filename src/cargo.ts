@@ -1,24 +1,14 @@
-import {spawn} from "child_process";
-import fs from "fs";
 import path from "path";
 import {Base64, CargoReturn} from "@d3lab/types";
 import {rust} from "@d3lab/services"
+import {sleep, extracted} from "@d3lab/utils"
 
 global.MY_CWD = process.cwd();
 
 (async function () {
         let res: CargoReturn;
 
-        function extracted(root: string, userPath: string, type: string) {
-            const target = path.join(root, "cargo-projects", "cosm", userPath);
-            fs.readFile(`${target}/${type}`, 'utf8', (err, data) => {
-                if (err) {
-                    console.error(err);
-                    return;
-                }
-                console.log(data);
-            });
-        }
+
 
         const userid = 'tkxkd0159'
         const lesson = 'lesson1'
@@ -33,17 +23,18 @@ global.MY_CWD = process.cwd();
            */
             if (process.argv[2] == "clippy") {
                 res = await rust.cosmRun("clippy", userid, lesson, chapter);
-                extracted(MY_CWD, projPath, "debug")
+                extracted(path.join(process.cwd(), "cargo-projects", "cosm"), projPath, "debug")
             } else {
                 res = await rust.cosmRun("cosm-build", userid, lesson, chapter);
-                extracted(MY_CWD, projPath, "out")
+                await sleep(1000)
+                extracted(path.join(process.cwd(), "cargo-projects", "cosm"), projPath, "out")
                 console.log(res === "Hello, world!\n" + "I am sub func\n")
             }
 
 
         } catch {
             console.log("** exit with non-zero **")
-            extracted(MY_CWD, projPath, "debug");
+            extracted(path.join(MY_CWD, "cargo-projects", "cosm"), projPath, "debug");
         }
     }
 )();

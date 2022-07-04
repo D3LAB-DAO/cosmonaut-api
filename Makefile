@@ -16,22 +16,16 @@ cosm-init:
 	bash -c "./scripts/init.sh --path $(TARGET_PATH) --clean";
 
 cosm-build:
-	@if docker ps -a --format "{{.Names}}" | grep "^$(CONTAINER_NAME)$$" > /dev/null; \
-	then docker exec -w /workspace $(CONTAINER_NAME) bash -c "./scripts/build.sh --path $(TARGET_PATH)"; \
-	else docker run -itd --name $(CONTAINER_NAME) -v $(CURDIR)/cargo-projects:/workspace $(DOCKER_IMG) /bin/bash > /dev/null \
-	&& docker exec -w /workspace $(CONTAINER_NAME) bash -c "./scripts/build.sh --path=$(TARGET_PATH)"; fi
+	docker run -d --rm -v $(CURDIR)/cargo-projects:/workspace -w /workspace $(DOCKER_IMG) \
+	bash -c "./scripts/build.sh --path=$(TARGET_PATH)";
 
 cosm-clean:
-	@if docker ps -a --format "{{.Names}}" | grep "^$(CONTAINER_NAME)$$" > /dev/null; \
-	then docker exec -w /workspace $(CONTAINER_NAME) bash -c "./scripts/clean.sh --path $(TARGET_PATH)"; \
-	else docker run -itd --name $(CONTAINER_NAME) -v $(CURDIR)/cargo-projects:/workspace $(DOCKER_IMG) /bin/bash > /dev/null \
-	&& docker exec -w /workspace $(CONTAINER_NAME) bash -c "./scripts/clean.sh --path=$(TARGET_PATH)"; fi
+	docker run -d --rm -v $(CURDIR)/cargo-projects:/workspace -w /workspace $(DOCKER_IMG) \
+	bash -c "./scripts/clean.sh --path=$(TARGET_PATH)";
 
 clippy:
-	@if docker ps -a --format "{{.Names}}" | grep "^$(CONTAINER_NAME)$$" > /dev/null; \
-	then docker exec -w /workspace $(CONTAINER_NAME) bash -c "./scripts/build.sh --path $(TARGET_PATH) --check"; \
-	else docker run -itd --name $(CONTAINER_NAME) -v $(CURDIR)/cargo-projects:/workspace $(DOCKER_IMG) /bin/bash > /dev/null \
-	 && docker exec -w /workspace $(CONTAINER_NAME) bash -c "./scripts/build.sh --path $(TARGET_PATH) --check"; fi
+	docker run -d --rm -v $(CURDIR)/cargo-projects:/workspace -w /workspace $(DOCKER_IMG) \
+	bash -c "./scripts/build.sh --path=$(TARGET_PATH)";
 
 TARGET_RM = $(shell docker ps -a --format "{{.Names}}"|grep "^$(CONTAINER_NAME)$$")
 clean:
