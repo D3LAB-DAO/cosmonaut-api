@@ -8,10 +8,13 @@ import session from "express-session";
 import compression from "compression";
 import {createClient} from "redis";
 import connectredis from 'connect-redis';
+import httpStatus from "http-status";
 
 import route from "./routes";
 import {apiLimiter} from "./middlewares/rate-limit";
 import conf from "./config"
+import { APIError, errorConverter, errorHandler } from "./middlewares/error";
+
 
 const app = express();
 app.use(apiLimiter);
@@ -59,5 +62,11 @@ app.use('/', (req, res, next) => {
     next();
 },
 route);
+
+app.use((req, res, next) => {
+    next(new APIError(httpStatus.NOT_FOUND, "Not found"));
+});
+app.use(errorConverter);
+app.use(errorHandler);
 
 export default app
