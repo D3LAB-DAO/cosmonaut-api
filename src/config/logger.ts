@@ -4,11 +4,11 @@ import winstonDaily from 'winston-daily-rotate-file';
 
 const LOG_ROOT = 'logs'
 const OP_LOG_PATH = process.env.NODE_ENV == 'production' ?
-    path.join(__dirname, '..', '..', LOG_ROOT, 'prod', 'operate') :
+    path.join(__dirname, '..', '..', '..', LOG_ROOT, 'prod', 'operate') :
     path.join(__dirname, '..', '..', LOG_ROOT, 'dev', 'operate');
 
 const ERROR_LOG_PATH = process.env.NODE_ENV == 'production' ?
-    path.join(__dirname, '..', '..', LOG_ROOT, 'prod', 'error') :
+    path.join(__dirname, '..', '..', '..', LOG_ROOT, 'prod', 'error') :
     path.join(__dirname, '..', '..', LOG_ROOT, 'dev', 'error');
 
 const {combine, timestamp, printf} = winston.format

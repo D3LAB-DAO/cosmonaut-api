@@ -1,5 +1,4 @@
 import {Server} from 'http';
-import 'dotenv/config';
 
 import app from "./app";
 import {log} from "./config"

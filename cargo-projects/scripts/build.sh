@@ -1,21 +1,21 @@
 #!/usr/bin/env bash
 
-if ! options=$(getopt -o '' --long path:,check -- "$@"); then
+if ! options=$(getopt -o '' --long path:,root -- "$@"); then
   echo "ERROR: print usage"
   exit 1
 fi
 
 eval set -- "$options"
 
-CLIPPY=false
+CHECK=false
 while true; do
   case "$1" in
   --path)
     TARGET_PATH=$2
     shift 2
     ;;
-  --check)
-    CLIPPY=true
+  --root)
+    CHECK=true
     shift 1
     ;;
   --)
@@ -25,9 +25,8 @@ while true; do
   esac
 done
 
-if [[ $CLIPPY == "true" ]]; then
-#  cargo clippy --manifest-path "${TARGET_PATH}/Cargo.toml" 2>> "${TARGET_PATH}/error" 1> "${TARGET_PATH}/out"
-  cargo clippy --manifest-path "${TARGET_PATH}/Cargo.toml" > "${TARGET_PATH}/debug" 2>&1
+if [[ $CHECK == "true" ]]; then
+  cargo run --manifest-path "${TARGET_PATH}/Cargo.toml" > "${TARGET_PATH}/debug" 2>&1
 else
-  cargo run --manifest-path "${TARGET_PATH}/Cargo.toml" 1>"${TARGET_PATH}/out" 2>"${TARGET_PATH}/debug"
+  cargo run Cargo.toml 1> out 2> debug
 fi

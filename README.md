@@ -1,3 +1,7 @@
+# Setup
+1. Setup Redis
+2. Setup PostgreSQL & make account, database
+3. Set .env
 # Run
 
 ```bash

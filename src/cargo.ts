@@ -27,8 +27,8 @@ global.MY_CWD = process.cwd();
             } else {
                 res = await rust.cosmRun("cosm-build", userid, lesson, chapter);
                 await sleep(1000)
-                extracted(path.join(process.cwd(), "cargo-projects", "cosm"), projPath, "out")
-                console.log(res === "Hello, world!\n" + "I am sub func\n")
+                const buildout = extracted(path.join(process.cwd(), "cargo-projects", "cosm"), projPath, "out")
+                console.log(buildout === "")
             }
 
 

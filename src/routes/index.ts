@@ -4,7 +4,7 @@ import rustRoute from './rust.route';
 const router = express.Router()
 
 router.get('/', (req, res) => {
-    res.send('Initial page');
+    res.json({msg: 'Initial page', sessionID: req.sessionID});
 })
 
 const subRoutes = [

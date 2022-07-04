@@ -7,15 +7,14 @@ function sleep(ms: number) {
     });
 }
 
-function extracted(root: string, userPath: string, type: string) {
+function extracted(root: string, userPath: string, type: string): string|undefined {
     const target = path.join(root, userPath);
-    fs.readFile(`${target}/${type}`, 'utf8', (err, data) => {
-        if (err) {
-            console.error(err);
-            return;
-        }
-        console.log(data);
-    });
+    try {
+        console.log(target)
+        return fs.readFileSync(`${target}/${type}`, {encoding: 'utf8'});
+    } catch (err) {
+        console.error(err)
+    }
 }
 
 export {

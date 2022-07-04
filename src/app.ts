@@ -3,30 +3,61 @@ import express from "express";
 import cors from "cors";
 import morgan from 'morgan';
 import helmet from "helmet";
+import cookieParser from 'cookie-parser';
+import session from "express-session";
 import compression from "compression";
+import {createClient} from "redis";
+import connectredis from 'connect-redis';
 
 import route from "./routes";
 import {apiLimiter} from "./middlewares/rate-limit";
-
+import conf from "./config"
 
 const app = express();
 app.use(apiLimiter);
-app.use(helmet());
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
-app.use(compression());
+
+app.use(cookieParser());
+const RedisStore = connectredis(session)
+let redisClient = createClient({ legacyMode: true })
+redisClient.connect().catch(console.error)
+const sessOpt: session.SessionOptions = {
+    store: new RedisStore({ client: redisClient }),
+    saveUninitialized: false,
+    secret: conf.secret as string,
+    resave: false,
+    cookie: {}
+}
 
 if (process.env.NODE_ENV == "production") {
-    const whiteList = ['http://localhost:63342'];
+    app.set('trust proxy', 1);
+    if (sessOpt.cookie) {
+        sessOpt.cookie.maxAge = 1000 * 60 * 60 * 2;
+        sessOpt.cookie.secure = true;
+    }
+    const whiteList = ['http://localhost:5500'];
     app.use(cors({origin: whiteList}));
 
-    const accessLogStream = createWriteStream(__dirname + '/../logs/prod/' + "access.log", {flags: 'a+'});
+    const accessLogStream = createWriteStream(__dirname + '/../../logs/prod/' + "access.log", {flags: 'a+'});
     app.use(morgan("combined", {stream: accessLogStream}));
 } else {
     app.use(cors())
     app.use(morgan("dev")); //log to console on development
 }
+app.use(session(sessOpt))
+app.locals.redis = redisClient;
 
-app.use('/', route);
+app.use(helmet());
+app.use(compression());
+
+
+app.use('/', (req, res, next) => {
+    if (!req.session.user) {
+        req.session.user = "LJS"
+    }
+    next();
+},
+route);
 
 export default app
