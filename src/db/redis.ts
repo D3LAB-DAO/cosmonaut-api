@@ -1,4 +1,5 @@
 import { createClient, RedisClientType } from 'redis';
+import conf from '../config'
 
 let client: RedisClientType;
 
@@ -9,7 +10,7 @@ export default {
         }
         if (!url) {
             client = createClient({
-                url: 'redis://localhost:6379'
+                url: conf.redis.url
             })
         } else {
             client = createClient({url})
