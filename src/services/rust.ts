@@ -25,24 +25,19 @@ function rustfmt(raw: Base64): Promise<Base64> {
     })
 }
 
-function cosmRun(cmd: string, owner: string, proj: string, lecture: string): Promise<string> {
+async function cosmRun(cmd: string, owner: string, proj: string, lecture: string): Promise<string> {
     let subprocess = spawn("make", [cmd, `OWNER=${owner}`, `PROJ=${proj}`, `LEC=${lecture}`])
+    let result = "";
+
+    subprocess.stdout.on('data', (data) => {
+        if (data instanceof Buffer) {
+            result += data.toString()
+        }
+    });
+
     return new Promise((resolve, reject) => {
-        subprocess.stdout.on('data', (data) => {
-            if (data instanceof Buffer) {
-                resolve(data.toString())
-            }
-        });
-
-        subprocess.stderr.on('data', (err) => {
-            if (err instanceof Buffer) {
-                reject(err.toString());
-            }
-        })
-
-        subprocess.on('close', (code) => {
-            console.log(`child process exited with code ${code}`);
-            resolve("close without stdout & stderr")
+        subprocess.on('close', (exitCode) => {
+            resolve(result)
         })
 
     })
