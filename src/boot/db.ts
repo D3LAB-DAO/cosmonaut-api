@@ -14,8 +14,12 @@ async function retrieve(target: string, client: Client) {
     }
     qset.pop();
     for (let q of qset) {
-        client.query(q, (err, res) => {
-        })
+        console.log(q)
+        try {
+            await client.query(q);
+        } catch (err) {
+            console.error(err)
+        }
     }
 }
 

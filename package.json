@@ -13,7 +13,8 @@
     "start": "ts-node -r tsconfig-paths/register src/index.ts",
     "cargo": "ts-node -r tsconfig-paths/register src/cargo.ts",
     "dist-test": "TS_NODE_BASEURL='dist' node -r tsconfig-paths/register dist/src/cargo.js",
-    "boot": "ts-node -r tsconfig-paths/register src/boot/index.ts"
+    "boot": "ts-node -r tsconfig-paths/register src/boot/index.ts",
+    "boot:dbtest": "ts-node -r tsconfig-paths/register src/boot/dbquery.ts"
   },
   "keywords": [],
   "author": "Jayden Lee",
