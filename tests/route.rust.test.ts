@@ -32,9 +32,12 @@ describe("Test /rust/* API endpoints",
                 const encodedData2 = Buffer.from(targetCode2, "utf-8").toString('base64');
 
                 const mockReq = {
-                    body: {
+                    body:
+                    {
+                        files: {
                         file1: encodedData1,
                         file2: encodedData2
+                        }
                     }
                 }
 

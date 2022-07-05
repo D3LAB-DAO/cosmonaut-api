@@ -5,7 +5,7 @@ import {FmtFiles} from "@d3lab/types";
 const fmtCodes = async (req: Request, res: Response) => {
     try {
 
-        const beforeFmtFiles: FmtFiles = req.body;
+        const beforeFmtFiles: FmtFiles = req.body['files'];
         const afterFmtFiles: FmtFiles = {};
         for (let [key, value] of Object.entries(beforeFmtFiles)) {
             afterFmtFiles[key] = await rust.rustfmt(value);
