@@ -13,7 +13,9 @@ import httpStatus from "http-status";
 import route from "./routes";
 import {apiLimiter} from "./middlewares/rate-limit";
 import conf from "./config"
-import { APIError, errorConverter, errorHandler } from "./middlewares/error";
+import { errorConverter, errorHandler } from "./middlewares/error";
+import { APIError } from "@d3lab/utils";
+
 
 
 const app = express();
