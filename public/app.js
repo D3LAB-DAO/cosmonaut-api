@@ -1,7 +1,14 @@
 const codeRunBtn = document.querySelector('#run-code');
 const codeFmtBtn = document.querySelector('#format-code');
+const googleBtn = document.querySelector('.google-btn');
 const wasmCode = document.querySelector('#wasm-editor');
 const editorWarn = document.querySelector('#wasm-editor-error');
+
+
+googleBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    console.log("I am google login");
+})
 
 codeRunBtn.addEventListener("click", (e) => {
     e.preventDefault();
