@@ -1,4 +1,4 @@
-.PHONY: rust-build clippy clean rust-init cargofmt
+.PHONY: rust-build clippy clean rust-init cargofmt rustfmt
 
 DOCKER_IMG = "cosmo-rust:1.0"
 CONTAINER_NAME ?= "cosmonaut"
@@ -7,8 +7,12 @@ PROJ ?= "lesson1"
 LEC ?= "ch1"
 TARGET_PATH = "cosm/$(OWNER)/$(PROJ)/$(LEC)"
 
+FMTCON_NAME ?= "cosmrustfmt"
+rustfmt:
+	@docker run --rm -i -a stdout $(DOCKER_IMG) rustfmt;
+
 cargofmt:
-	docker run -d --rm -v $(CURDIR)/cargo-projects/$(TARGET_PATH):/workspace -w /workspace $(DOCKER_IMG) \
+	@docker run -d --rm -v $(CURDIR)/cargo-projects/$(TARGET_PATH):/workspace -w /workspace $(DOCKER_IMG) \
 	bash -c "cargo fmt";
 
 cosm-init:

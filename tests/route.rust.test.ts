@@ -21,7 +21,7 @@ describe("Test /rust/* API endpoints",
                     resObj = result;
                 })
             }
-            mockNext = {};
+            mockNext = jest.fn().mockImplementation(() => {});
         });
 
         test('Test POST /rust/fmt',

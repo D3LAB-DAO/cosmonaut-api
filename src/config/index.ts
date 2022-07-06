@@ -20,6 +20,7 @@ export default {
     env: process.env.NODE_ENV,
     port: process.env.PORT,
     secret: process.env.SECRET_KEY,
+    isLocalRust: process.env.LOCAL_RUST_SET,
     redis,
     pg
 }
