@@ -1,4 +1,4 @@
-import {Request, Response} from "express";
+import {NextFunction, Request, Response} from "express";
 import {rust} from "@d3lab/controllers";
 import {Base64} from "@d3lab/types";
 
@@ -6,6 +6,7 @@ describe("Test /rust/* API endpoints",
     () => {
         let mockReq: Partial<Request>;
         let mockRes: Partial<Response>;
+        let mockNext: Partial<NextFunction>
         let resObj = {};
 
         beforeEach(() => {
@@ -20,11 +21,11 @@ describe("Test /rust/* API endpoints",
                     resObj = result;
                 })
             }
+            mockNext = {};
         });
 
         test('Test POST /rust/fmt',
             async () => {
-                const expectedCode = "success";
                 const targetCode1: string = "fn main(){println!(\"test function\");}"
                 const encodedData1: Base64 = Buffer.from(targetCode1, "utf-8").toString('base64');
                 const targetCode2: string = "fn fizzbuzz(n: u32) -> () { if is_divisible_by(n, 15) { println!(\"fizzbuzz\"); } " +
@@ -60,13 +61,12 @@ describe("Test /rust/* API endpoints",
 
 
                 const expectedRes = {
-                    code: expectedCode,
                     result: {
                         file1: encodedCmpStr1,
                         file2: encodedCmpStr2
                     }
                 }
-                await rust.fmtCodes(mockReq as Request, mockRes as Response);
+                await rust.fmtCodes(mockReq as Request, mockRes as Response, mockNext as NextFunction);
 
                 expect(resObj).toEqual(expectedRes)
 

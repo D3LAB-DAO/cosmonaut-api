@@ -1,10 +1,9 @@
 import httpStatus from "http-status";
-import express from "express";
+import {Request, Response, NextFunction} from "express";
 import config from "../config";
 import { APIError } from "@d3lab/utils";
 
-
-const errorConverter = (err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+const errorConverter = (err: any, req: Request, res: Response, next: NextFunction) => {
     let error = err;
     if (!(error instanceof APIError)) {
         const statusCode = error.statusCode || httpStatus.BAD_REQUEST;
@@ -14,7 +13,7 @@ const errorConverter = (err: any, req: express.Request, res: express.Response, n
     next(error);
 };
 
-const errorHandler = (err: APIError, req: express.Request, res: express.Response, next: express.NextFunction) => {
+const errorHandler = (err: APIError, req: Request, res: Response, next: NextFunction) => {
     let { statusCode, message } = err;
     if (config.env === "production" && !err.isOperational) {
         statusCode = httpStatus.INTERNAL_SERVER_ERROR;

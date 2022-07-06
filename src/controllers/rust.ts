@@ -1,8 +1,8 @@
-import {Request, Response} from "express";
+import {NextFunction, Request, Response} from "express";
 import {rust} from "@d3lab/services";
 import {FmtFiles} from "@d3lab/types";
 
-const fmtCodes = async (req: Request, res: Response) => {
+const fmtCodes = async (req: Request, res: Response, next: NextFunction) => {
     try {
 
         const beforeFmtFiles: FmtFiles = req.body['files'];
@@ -12,14 +12,10 @@ const fmtCodes = async (req: Request, res: Response) => {
         }
 
         res.send({
-            code: "success",
             result: afterFmtFiles
         });
     } catch (err) {
-        res.send({
-            code: "fail",
-            result: err
-        })
+        next(err)
     }
 };
 
