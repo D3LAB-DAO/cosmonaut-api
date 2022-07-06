@@ -1,13 +1,6 @@
 import * as dotenv from 'dotenv';
 import path from 'path';
 
-declare module 'express-session' {
-  export interface SessionData {
-    user: string;
-    jwt: string;
-  }
-}
-
 dotenv.config({path: path.join(__dirname, '..', '..', '.env.dev')});
 
 const redis = {
