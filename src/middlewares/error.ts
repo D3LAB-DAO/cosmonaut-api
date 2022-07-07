@@ -1,7 +1,7 @@
 import httpStatus from "http-status";
 import {Request, Response, NextFunction} from "express";
 import config from "../config";
-import { APIError } from "@d3lab/utils";
+import { APIError } from "@d3lab/types";
 
 const errorConverter = (err: any, req: Request, res: Response, next: NextFunction) => {
     let error = err;

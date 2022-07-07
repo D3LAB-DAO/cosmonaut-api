@@ -14,7 +14,7 @@ import route from "./routes";
 import {apiLimiter} from "./middlewares/rate-limit";
 import conf from "./config"
 import { errorConverter, errorHandler } from "./middlewares/error";
-import { APIError } from "@d3lab/utils";
+import { APIError } from "@d3lab/types";
 
 
 

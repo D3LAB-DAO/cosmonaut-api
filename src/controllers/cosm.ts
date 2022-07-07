@@ -3,7 +3,8 @@ import fs from 'fs';
 import {Request, Response, NextFunction} from "express";
 import httpStatus from 'http-status';
 import {rust} from "@d3lab/services";
-import {sleep, APIError} from "@d3lab/utils";
+import {APIError} from "@d3lab/types";
+import {sleep} from "@d3lab/utils";
 
 const cosminit = async (req: Request, res: Response, next: NextFunction) => {
     const userid = 'tkxkd0159'

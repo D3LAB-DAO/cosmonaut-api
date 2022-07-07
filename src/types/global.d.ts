@@ -9,7 +9,7 @@ declare global {
 }
 
 declare module "express-session" {
-    export interface SessionData {
+    interface SessionData {
         returnTo: string
         user: string
         jwt: string
