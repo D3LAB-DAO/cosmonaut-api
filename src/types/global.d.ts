@@ -5,14 +5,24 @@ declare global {
         interface Request {
             isAuthenticated(): boolean;
         }
+
+        interface User {
+            id: string;
+            issuer: string;
+        }
     }
 }
 
 declare module "express-session" {
     interface SessionData {
-        returnTo: string
-        user: string
-        jwt: string
+        returnTo?: string
+        progress?: object
+        passport?: {
+            user: {
+                id: string
+                issuer: string
+            }
+        }
     }
 }
 

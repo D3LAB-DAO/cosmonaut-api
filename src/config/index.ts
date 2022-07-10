@@ -1,7 +1,4 @@
-import * as dotenv from 'dotenv';
-import path from 'path';
-
-dotenv.config({path: path.join(__dirname, '..', '..', '.env.dev')});
+import './auth'
 
 const redis = {
     url: `redis://${process.env.REDISHOST}:${process.env.REDISPORT}`
@@ -15,14 +12,21 @@ const pg = {
     dbname: process.env.PGDATABASE
 }
 
+const front = {
+    host: process.env.HOST_ADDR,
+    login: process.env.HOST_ADDR + "/login.html",
+    main: process.env.HOST_ADDR + "/index.html"
+}
 
 export default {
     env: process.env.NODE_ENV,
     port: process.env.PORT,
     secret: process.env.SECRET_KEY,
     isLocalRust: process.env.LOCAL_RUST_SET,
+    corsWhiteList: ["http://127.0.0.1:5501"],
     redis,
-    pg
+    pg,
+    front
 }
 
 export * as log from './logger'

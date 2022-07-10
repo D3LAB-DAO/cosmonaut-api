@@ -8,10 +8,13 @@
       "env_production": {
         "NODE_ENV": "production",
         "TS_NODE_BASEURL": "./dist",
-        "PORT": 3000
+        "PORT": 3334
       },
       "env_development": {
-        "NODE_ENV": "development"
+        "IS_DIST": true,
+        "NODE_ENV": "development",
+        "TS_NODE_BASEURL": "./dist",
+        "PORT": 3334
       }
     }
   ]

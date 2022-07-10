@@ -1,5 +1,3 @@
-DROP PROCEDURE IF EXISTS update_lesson(TEXT, TEXT, INTEGER, INTEGER);
-##
 CREATE OR REPLACE PROCEDURE update_lesson(newp TEXT, news TEXT, newl INTEGER, newc INTEGER)
 LANGUAGE SQL
 BEGIN ATOMIC
@@ -7,9 +5,6 @@ BEGIN ATOMIC
   ON CONFLICT ON CONSTRAINT unique_progress
   DO UPDATE SET chapter = newc WHERE users.provider = newp AND users.subject = news AND users.lesson = newl;
 END;
-##
-
-DROP FUNCTION IF EXISTS get_chapter(TEXT, TEXT, INTEGER);
 ##
 CREATE OR REPLACE FUNCTION get_chapter(u_provider TEXT, u_subject TEXT, u_lesson INTEGER)
 RETURNS INTEGER AS $$
