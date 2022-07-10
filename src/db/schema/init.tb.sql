@@ -1,10 +1,23 @@
+DROP TABLE IF EXISTS users;
+CREATE TABLE users(
+   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+   provider TEXT NOT NULL,
+   subject TEXT NOT NULL,
+   lesson INTEGER NOT NULL,
+   chapter INTEGER NOT NULL,
+   CONSTRAINT unique_progress UNIQUE (provider, subject, lesson)
+);
+INSERT INTO users(provider, subject, lesson, chapter)
+VALUES('google', 'tkxkd0159', 0, 1);
+
 DROP TABLE IF EXISTS federated_credentials;
 CREATE TABLE federated_credentials(
-   id INTEGER GENERATED ALWAYS AS IDENTITY,
+   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
    provider TEXT NOT NULL,
    subject TEXT NOT NULL,
    name TEXT NOT NULL,
-   PRIMARY KEY (provider, subject)
+   create_at TIMESTAMPTZ,
+   UNIQUE (provider, subject)
 );
 INSERT INTO federated_credentials(provider, subject, name)
 VALUES('https://accounts.google.com', 'tkxkd0159', 'JAESEUNG LEE');

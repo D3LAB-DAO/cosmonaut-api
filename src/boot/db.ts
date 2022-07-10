@@ -4,17 +4,16 @@ import {Client} from "pg";
 
 import conf from "../config";
 
-async function retrieve(target: string, client: Client) {
+async function retrieve(delimiter: string, target: string, client: Client) {
     const sqlpath = path.join(__dirname, '..', target);
     const tmp = await fs.readFile(sqlpath, { encoding: 'utf8'});
-    const data = tmp.split(";");
+    const data = tmp.split(delimiter);
     const qset = [];
     for (let q of data) {
         qset.push(q.trim());
     }
     qset.pop();
     for (let q of qset) {
-        console.log(q)
         try {
             await client.query(q);
         } catch (err) {
@@ -32,14 +31,14 @@ async function setPgdb(sqlpath: string) {
         database: "postgres"
     })
     await client.connect();
-    await retrieve(sqlpath, client);
+    await retrieve(';', sqlpath, client);
 
     setTimeout(() => {
         client.end();
     }, 1000);
 }
 
-async function setTables(dbname: string, tbpaths: string[]) {
+async function setTables(dbname: string, sqlpaths: string[]) {
     const client = new Client({
         user: "ljs",
         password: "secret",
@@ -49,8 +48,28 @@ async function setTables(dbname: string, tbpaths: string[]) {
     })
     await client.connect();
 
-    for (let p of tbpaths) {
-        await retrieve(p, client);
+    for (let p of sqlpaths) {
+        await retrieve(';', p, client);
+    }
+
+    setTimeout(() => {
+        client.end();
+    }, 1000);
+
+}
+
+async function setLogics(dbname: string, sqlpaths: string[]) {
+    const client = new Client({
+        user: "ljs",
+        password: "secret",
+        host: "localhost",
+        port: 5432,
+        database: dbname
+    })
+    await client.connect();
+
+    for (let p of sqlpaths) {
+        await retrieve('##', p, client);
     }
 
     setTimeout(() => {
@@ -61,5 +80,6 @@ async function setTables(dbname: string, tbpaths: string[]) {
 
 export {
     setPgdb,
-    setTables
+    setTables,
+    setLogics
 }

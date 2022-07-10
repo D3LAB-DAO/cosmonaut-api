@@ -3,8 +3,7 @@ import conf from '../config'
 
 let client: RedisClientType;
 
-export default {
-    getClient: async (url?: string) => {
+const getClient = async (url?: string) => {
         if (client) {
             return client
         }
@@ -21,4 +20,6 @@ export default {
         return client
 
     }
-}
+
+
+export {getClient}
