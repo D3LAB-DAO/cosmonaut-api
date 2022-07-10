@@ -1,7 +1,7 @@
 import fs from "fs/promises";
-import path from "path";
 import {Client} from "pg";
 
+import path from 'path';
 import conf from "../config";
 
 async function retrieve(delimiter: string, target: string, client: Client) {
@@ -38,48 +38,27 @@ async function setPgdb(sqlpath: string) {
     }, 1000);
 }
 
-async function setTables(dbname: string, sqlpaths: string[]) {
+async function runSQL(dbname: string, sqlpaths: string[], delimiter: string) {
     const client = new Client({
-        user: "ljs",
-        password: "secret",
-        host: "localhost",
-        port: 5432,
+        user: conf.pg.user,
+        password: conf.pg.pw,
+        host: conf.pg.host,
+        port: conf.pg.port,
         database: dbname
     })
     await client.connect();
 
     for (let p of sqlpaths) {
-        await retrieve(';', p, client);
+        await retrieve(delimiter, p, client);
     }
 
     setTimeout(() => {
         client.end();
-    }, 1000);
-
-}
-
-async function setLogics(dbname: string, sqlpaths: string[]) {
-    const client = new Client({
-        user: "ljs",
-        password: "secret",
-        host: "localhost",
-        port: 5432,
-        database: dbname
-    })
-    await client.connect();
-
-    for (let p of sqlpaths) {
-        await retrieve('##', p, client);
-    }
-
-    setTimeout(() => {
-        client.end();
-    }, 1000);
+    }, 500);
 
 }
 
 export {
     setPgdb,
-    setTables,
-    setLogics
+    runSQL
 }

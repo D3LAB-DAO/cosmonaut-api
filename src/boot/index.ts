@@ -1,4 +1,8 @@
-import { setPgdb, setTables, setLogics} from "./db";
+import path from 'path';
+import * as dotenv from 'dotenv';
+dotenv.config({path: path.join(process.cwd(), '.env.dev')})
+
+import { setPgdb, runSQL} from "./db";
 import {sleep} from "../utils";
 
 (async function(){
@@ -10,6 +14,7 @@ import {sleep} from "../utils";
         }
     }
 
-    // await setTables('cosmonaut', ['db/schema/init.tb.sql']);
-    await setLogics('cosmonaut', ['db/schema/logic.sql']);
+    await runSQL('cosmonaut', ['db/schema/clean.sql'], ';');
+    await runSQL('cosmonaut', ['db/schema/init.tb.sql'], ';');
+    await runSQL('cosmonaut', ['db/schema/logic.sql'], '##');
 })();
