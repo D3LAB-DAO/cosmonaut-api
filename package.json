@@ -64,6 +64,7 @@
     "passport": "^0.6.0",
     "passport-google-oidc": "^0.1.0",
     "pg": "^8.7.3",
+    "pidtree": "^0.6.0",
     "pm2": "^5.2.0",
     "redis": "^4.1.1",
     "validator": "^13.7.0",

@@ -28,6 +28,26 @@ const cosminit = async (req: Request, res: Response, next: NextFunction) => {
     }
 }
 
+const cosmBuild = async (req: Request, res: Response, next: NextFunction) => {
+    const userid = 'tkxkd0159'
+    const lesson = req.body.lesson ? req.body.lesson : undefined;
+    const chapter = req.body.chapter ? req.body.chapter : undefined;
+    if (lesson === undefined || chapter === undefined) {
+        return next(new APIError(httpStatus.BAD_REQUEST, "you must fill lesson & chapter name"))
+    }
+
+    try {
+        const data = await rust.cosmRun("cosm-build", userid, lesson, chapter);
+        res.json({answer: data})
+
+    } catch (err) {
+        if (typeof err === 'string') {
+            return next(new APIError(httpStatus.BAD_REQUEST, err));
+        }
+    }
+}
+
 export {
-    cosminit
+    cosminit,
+    cosmBuild
 }

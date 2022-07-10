@@ -7,7 +7,7 @@ import cosmRoute from './cosm.route';
 
 const router = express.Router()
 
-router.use(timeout(8000));
+router.use(timeout(5000));
 
 router.get('/', (req, res) => {
     res.json({msg: 'Initial page', sessionID: req.sessionID});

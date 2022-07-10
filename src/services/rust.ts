@@ -1,5 +1,6 @@
 import {spawn} from "child_process";
 import {Base64} from "@d3lab/types";
+import pidtree from 'pidtree';
 
 const b64ToStr = (raw: Base64): string => {
     return Buffer.from(raw, 'base64').toString('utf-8')
@@ -49,6 +50,23 @@ function rustfmt2(raw: Base64): Promise<Base64> {
 async function cosmRun(cmd: string, owner: string, proj: string, lecture: string): Promise<string> {
     let subprocess = spawn("make", [cmd, `OWNER=${owner}`, `PROJ=${proj}`, `LEC=${lecture}`])
     let result = "";
+    let error = "";
+
+    setTimeout(() => {
+        result = ""
+        error = "Your code execution time is over the maximum"
+
+        pidtree(subprocess.pid as number, (err, pids) => {
+            for (let i=0; i < pids.length; i++) {
+                if (i === 0) {
+                    process.kill(pids[i], "SIGTERM");
+                } else {
+                    process.kill(pids[i], "SIGKILL");
+                }
+            }
+        })
+
+    }, 3000)
 
     subprocess.stdout.on('data', (data) => {
         if (data instanceof Buffer) {
@@ -56,11 +74,20 @@ async function cosmRun(cmd: string, owner: string, proj: string, lecture: string
         }
     });
 
+    subprocess.stderr.on('data', (data) => {
+        if (data instanceof Buffer) {
+            error += data.toString()
+        }
+    });
+
     return new Promise((resolve, reject) => {
         subprocess.on('close', (exitCode) => {
-            resolve(result)
+            if (result !== "") {
+                resolve(result)
+            } else {
+                reject(error)
+            }
         })
-
     })
 }
 

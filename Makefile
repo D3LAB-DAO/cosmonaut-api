@@ -22,7 +22,7 @@ cosm-init:
 cosm-build:
 	@docker run --rm -a stderr -a stdout \
 	-v $(CURDIR)/cargo-projects/$(TARGET_PATH):/workspace -w /workspace $(DOCKER_IMG) \
-	bash -c "cargo run 2>&1";
+	bash -c "cargo run";
 
 cosm-clean:
 	@docker run -d --rm -v $(CURDIR)/cargo-projects/$(TARGET_PATH):/workspace -w /workspace $(DOCKER_IMG) \
