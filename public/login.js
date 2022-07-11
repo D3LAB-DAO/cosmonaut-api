@@ -1,6 +1,5 @@
-const googleBtn = document.querySelector('.google-btn');
+const googleBtn = document.querySelector(".google-btn");
 
-
-googleBtn.addEventListener("click", (e) => {
+googleBtn.addEventListener("click", async (e) => {
     e.preventDefault();
-})
+});

@@ -18,6 +18,17 @@ router.get(
     })
 );
 
+router.get("/login/federated/github", passport.authenticate("github"));
+
+router.get(
+    "/oauth2/redirect/github",
+    passport.authenticate("github", {
+        successReturnToOrRedirect: conf.front.main,
+        failureRedirect: conf.front.login,
+    })
+);
+
+
 router.get("/logout", (req, res, next) => {
     req.logout((err) => {
         if (err) {

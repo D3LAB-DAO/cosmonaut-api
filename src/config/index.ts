@@ -21,6 +21,8 @@ const envScheme = joi.object({
     REDISPORT: joi.string().min(4).max(5).required(),
     GOOGLE_CLIENT_ID: joi.string().required(),
     GOOGLE_CLIENT_SECRET: joi.string().required(),
+    GITHUB_CLIENT_ID: joi.string().required(),
+    GITHUB_CLIENT_SECRET: joi.string().required(),
     FRONT_HOST_ADDR: joi.string().required(),
 }).unknown()
 

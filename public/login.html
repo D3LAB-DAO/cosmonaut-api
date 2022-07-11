@@ -1,23 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link href="app.css" rel="stylesheet">
-    <link href="https://unpkg.com/mvp.css" rel="stylesheet">
-    <title>google login</title>
-</head>
-<body>
+    <head>
+        <meta charset="UTF-8" />
+        <link href="app.css" rel="stylesheet" />
+        <link href="https://unpkg.com/mvp.css" rel="stylesheet" />
+        <title>login</title>
+    </head>
+    <body>
+        <h1 style="text-align: center">login test</h1>
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="//fonts.googleapis.com/css?family=Roboto:400"
+        />
 
-<h1 style="text-align: center;">google login test</h1>
-<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:400" />
+        <div
+            class="google-btn"
+            OnClick="location.href ='http://127.0.0.1:3334/auth/login/federated/google'"
+        >
+            <div class="google-icon-wrapper">
+                <img
+                    class="google-icon-svg"
+                    src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
+                />
+            </div>
+            <p class="btn-text"><b>Sign in with Google</b></p>
+        </div>
 
-<div class="google-btn" OnClick="location.href ='http://127.0.0.1:3334/auth/login/federated/google'">
-  <div class="google-icon-wrapper">
-    <img class="google-icon-svg" src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"/>
-  </div>
-  <p class="btn-text"><b>Sign in with Google</b></p>
-</div>
+        <div
+            class="github-btn"
+            OnClick="location.href ='http://127.0.0.1:3334/auth/login/federated/github'"
+        >
+            <div class="github-icon-wrapper">
+                <img
+                    class="github-btn-svg"
+                    src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+                />
+            </div>
+            <p class="btn-text"><b>Sign in with Github</b></p>
+        </div>
 
-<script src="./login.js" type="text/javascript"></script>
-</body>
+        <script src="./login.js" type="text/javascript"></script>
+    </body>
 </html>
