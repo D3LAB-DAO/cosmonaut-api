@@ -1,6 +1,7 @@
 import {spawn} from "child_process";
-import {Base64} from "@d3lab/types";
 import pidtree from 'pidtree';
+import {Base64} from "@d3lab/types";
+import conf from "@d3lab/config"
 
 const b64ToStr = (raw: Base64): string => {
     return Buffer.from(raw, 'base64').toString('utf-8')
@@ -66,7 +67,7 @@ async function cosmRun(cmd: string, owner: string, proj: string, lecture: string
             }
         })
 
-    }, 3000)
+    }, conf.timeout.rust)
 
     subprocess.stdout.on('data', (data) => {
         if (data instanceof Buffer) {

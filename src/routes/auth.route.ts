@@ -4,6 +4,14 @@ import conf from "@d3lab/config";
 
 const router = Router();
 
+router.get("/check", (req, res) => {
+    if (req.isAuthenticated()) {
+        res.json({isLogin: true})
+    } else {
+        res.json({isLogin: false})
+    }
+})
+
 router.get("/login", (req, res, next) => {
     res.redirect(conf.front.login);
 });

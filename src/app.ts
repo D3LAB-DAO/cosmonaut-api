@@ -31,11 +31,10 @@ redisClient.connect().catch(console.error);
 const sessOpt: session.SessionOptions = {
     store: new RedisStore({ client: redisClient }),
     saveUninitialized: false,
-    secret: conf.secret as string,
+    secret: conf.sessSecret as string,
     resave: false,
-    cookie: {},
+    cookie: {secure: false},
 };
-
 
 const corsOpts = {
     origin: conf.corsWhiteList,

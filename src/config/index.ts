@@ -12,6 +12,7 @@ const envScheme = joi.object({
     PORT: joi.string().min(4).max(5).required(),
     NODE_ENV: joi.string().valid('development', 'production').required(),
     LOCAL_RUST_SET: joi.string().valid('true', 'false').required(),
+    SESS_SECRET: joi.string().required(),
     PGHOST: joi.string().required(),
     PGPORT: joi.string().min(4).max(5).required(),
     PGUSER: joi.string().required(),
@@ -24,12 +25,19 @@ const envScheme = joi.object({
     GITHUB_CLIENT_ID: joi.string().required(),
     GITHUB_CLIENT_SECRET: joi.string().required(),
     FRONT_HOST_ADDR: joi.string().required(),
+    REQ_TIMEOUT: joi.string().required(),
+    RUST_TIMEOUT: joi.string().required()
 }).unknown()
 
 const {value: envs, error: err} = envScheme.validate(process.env)
 if(err) {
     console.error(err)
     process.exit(1)
+}
+
+const timeout = {
+    express: Number(envs.REQ_TIMEOUT),
+    rust: Number(envs.RUST_TIMEOUT)
 }
 
 const redis = {
@@ -53,9 +61,10 @@ const front = {
 export default {
     nodeEnv: envs.NODE_ENV,
     port: envs.PORT,
-    secret: envs.SECRET_KEY,
+    sessSecret: envs.SESS_SECRET,
     isLocalRust: envs.LOCAL_RUST_SET,
     corsWhiteList: ["http://127.0.0.1:5501"],
+    timeout,
     redis,
     pg,
     front
