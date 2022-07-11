@@ -13,7 +13,6 @@ router.get('/', (req, res) => {
     res.json({msg: 'Initial page', sessionID: req.sessionID});
 })
 
-// TODO: add timeout for subprocess
 const subRoutes = [
     {
         path: '/auth',

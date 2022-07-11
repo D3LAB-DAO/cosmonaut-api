@@ -32,7 +32,7 @@ interface PassportPhoto {
 }
 
 interface PassportProfile {
-    provider: string
+    provider?: string
     id: string
     displayName?: string
     name?: {

@@ -18,25 +18,26 @@ passport.use(
             cb: any
         ) {
             let pgdb;
+            const provider = 'google';
             try {
                 pgdb = await pg.getClient();
                 let res = await pgdb.query(
                     "SELECT * FROM federated_credentials WHERE provider = $1 AND subject = $2",
-                    [profile.provider, profile.id]
+                    [provider, profile.id]
                 );
                 if (res.rows.length === 0) {
                     await pgdb.query(
                         "INSERT INTO users (provider, subject, disp_name, lesson, chapter) VALUES($1, $2, $3, $4, $5)",
-                        [profile.provider, profile.id, profile.displayName, 0, 1]
+                        [provider, profile.id, profile.displayName, 0, 1]
                     );
                     await pgdb.query(
                         "INSERT INTO federated_credentials (provider, subject, created_at) VALUES($1, $2, $3)",
-                        [profile.provider, profile.id, new Date().toISOString()]
+                        [provider, profile.id, new Date().toISOString()]
                     );
 
-                    return cb(null, { id: profile.id, issuer: profile.provider });
+                    return cb(null, { id: profile.id, issuer: provider });
                 } else {
-                    return cb(null, { id: profile.id, issuer: profile.provider });
+                    return cb(null, { id: profile.id, issuer: provider });
                 }
             } catch (error) {
                 cb(error);
