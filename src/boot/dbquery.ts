@@ -1,8 +1,4 @@
 import {Client} from "pg";
-
-import * as dotenv from 'dotenv';
-import path from 'path';
-dotenv.config({path: path.join(process.cwd(), '.env.dev')})
 import conf from "../config";
 
 (async function(){

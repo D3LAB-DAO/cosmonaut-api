@@ -15,7 +15,7 @@ const errorConverter = (err: any, req: Request, res: Response, next: NextFunctio
 
 const errorHandler = (err: APIError, req: Request, res: Response, next: NextFunction) => {
     let { statusCode, message } = err;
-    if (config.env === "production" && !err.isOperational) {
+    if (config.nodeEnv === "production" && !err.isOperational) {
         statusCode = httpStatus.INTERNAL_SERVER_ERROR;
         message = httpStatus[`${statusCode}_NAME`] as string;
     }
@@ -25,10 +25,10 @@ const errorHandler = (err: APIError, req: Request, res: Response, next: NextFunc
     const response = {
         code: statusCode,
         message,
-        ...(config.env === "development" && { stack: err.stack }),
+        ...(config.nodeEnv === "development" && { stack: err.stack }),
     };
 
-    if (config.env === "development") {
+    if (config.nodeEnv === "development") {
         console.error(err);
     }
 

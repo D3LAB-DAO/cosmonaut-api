@@ -10,21 +10,9 @@ import { createClient } from "redis";
 import connectredis from "connect-redis";
 import httpStatus from "http-status";
 import passport from "passport";
-
-import * as dotenv from 'dotenv';
 import path from 'path';
-if (process.env.NODE_ENV !== 'production') {
-    if (process.env.IS_DIST) {
-        dotenv.config({path: path.join(__dirname, '..', '..', '.env.dev')});
 
-    } else {
-        dotenv.config({path: path.join(__dirname, '..', '.env.dev')});
-    }
-} else {
-    dotenv.config({path: path.join(__dirname, '..', '..', '.env')});
-}
 import conf from "./config";
-
 import route from "./routes";
 import { apiLimiter } from "./middlewares/rate-limit";
 import { errorConverter, errorHandler } from "./middlewares/error";
@@ -53,7 +41,7 @@ const corsOpts = {
     origin: conf.corsWhiteList,
     credentials: true
 };
-if (process.env.NODE_ENV == "production") {
+if (conf.nodeEnv == "production") {
     app.use(cors(corsOpts));
     app.set("trust proxy", 1);
     if (sessOpt.cookie) {

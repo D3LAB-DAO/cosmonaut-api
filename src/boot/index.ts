@@ -1,8 +1,6 @@
 import path from 'path';
-import * as dotenv from 'dotenv';
-dotenv.config({path: path.join(process.cwd(), '.env.dev')})
 
-import { setPgdb, runSQL} from "./db";
+import {setPgdb, runSQL} from "./db";
 import {sleep} from "../utils";
 
 (async function(){

@@ -1,51 +1,30 @@
 # Setup
 1. Setup Redis
 2. Setup PostgreSQL & make account, database
-3. Set .env
+3. Set .env (Refer to envSchema of config)
+4. Build cosm-rust image to build contract & Run
+```sh
+docker build -t cosmo-rust:1.0 .
+docker run -it --name jsrust cosmo-rust:1.0
+```
 # Run
 
 ```bash
-npm start
-
-docker build -t cosmo-rust:1.0 .
-docker run -it --name jsrust cosmo-rust:1.0
-
+npm start # Run wihtout build for only dev purpose
 make cosm-build OWNER="tkxkd0159" PROJ="ch3" LEC="lesson1"
-
-npx pm2 list
+```
+## 1) DB
+```sh
+# Initialization
+docker run -d -p 5432:5432 --name <pg_container_name> -e POSTGRES_PASSWORD=<pw> postgres
+docker run -d -p 6379:6379 --name <redis_container_name> redis
+# Attach
+docker exec -it <pg_container_name> psql -U postgres
+docker exec -it <redis_container_name> redis-cli
 ```
 
 # Flow
 ```
 make cosm-init
 npm run dist-test
-```
-
-# .env
-
-```
-PORT=3000
-NODE_ENV=development
-```
-
-# API
-
-**POST** Do rust fmt  
-_Request_
-
-```http request
-POST /rust/fmt HTTP/1.1
-Host: localhost:3000
-Content-Type: application/json
-
-target_rust_code_encoded_with_base64
-```
-
-_Response_
-
-```json
-{
-  "code": "success",
-  "result": "Zm4gbWFpbigpIHsKICAgIHByaW50bG4hKCJ0ZXN0IGZ1bmN0aW9uIik7Cn0K"
-}
 ```
