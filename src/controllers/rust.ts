@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import { rust } from "@d3lab/services";
-import { FmtFiles } from "@d3lab/types";
+import { RustFiles } from "@d3lab/types";
 import conf from "@d3lab/config";
 
 const fmtCodes = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const beforeFmtFiles: FmtFiles = req.body["files"];
-        const afterFmtFiles: FmtFiles = {};
+        const beforeFmtFiles: RustFiles = req.body["files"];
+        const afterFmtFiles: RustFiles = {};
 
         if (conf.isLocalRust === "true") {
             for (let [key, value] of Object.entries(beforeFmtFiles)) {

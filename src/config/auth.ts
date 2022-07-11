@@ -25,10 +25,10 @@ passport.use(
                     "SELECT * FROM federated_credentials WHERE provider = $1 AND subject = $2",
                     [provider, profile.id]
                 );
-                if (res.rows.length === 0) {
+                if (res.rows && res.rows.length === 0) {
                     await pgdb.query(
                         "INSERT INTO users (provider, subject, disp_name, lesson, chapter) VALUES($1, $2, $3, $4, $5)",
-                        [provider, profile.id, profile.displayName, 0, 1]
+                        [provider, profile.id, profile.displayName, 1, 1]
                     );
                     await pgdb.query(
                         "INSERT INTO federated_credentials (provider, subject, created_at) VALUES($1, $2, $3)",
@@ -68,10 +68,10 @@ passport.use(
                     "SELECT * FROM federated_credentials WHERE provider = $1 AND subject = $2",
                     [profile.provider, profile.id]
                 );
-                if (res.rows.length === 0) {
+                if (res.rows && res.rows.length === 0) {
                     await pgdb.query(
                         "INSERT INTO users (provider, subject, disp_name, lesson, chapter) VALUES($1, $2, $3, $4, $5)",
-                        [profile.provider, profile.id, profile.displayName, 0, 1]
+                        [profile.provider, profile.id, profile.displayName, 1, 1]
                     );
                     await pgdb.query(
                         "INSERT INTO federated_credentials (provider, subject, created_at) VALUES($1, $2, $3)",

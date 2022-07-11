@@ -17,7 +17,7 @@ init().catch((e) => {
 });
 
 const unexpectedErrHandler = (err: Error) => {
-    log.errorLogger.error(err);
+    process.env.NODE_ENV === 'development' ? console.error(err) : log.errorLogger.error(err)
     if (server) {
         server.close(() => {
             log.opLogger.info("Server closed");

@@ -1,5 +1,7 @@
 import path from "path";
-import fs from "fs";
+import fs, { write } from "fs";
+import { writeFile } from "fs/promises";
+import { Base64, RustFiles } from "@d3lab/types";
 
 function sleep(ms: number) {
     return new Promise((resolve) => {
@@ -21,4 +23,32 @@ function extracted(
     }
 }
 
-export { sleep, extracted };
+const b64ToStr = (raw: Base64): string => {
+    return Buffer.from(raw, "base64").toString("utf-8");
+};
+
+async function _saveRustCode(path: string, file: Base64) {
+    try {
+        const stringCode = b64ToStr(file).trim();
+        await writeFile(path, stringCode);
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+async function saveRustCodeFiles(files: RustFiles, prefix: string, uid: string, lesson: string, chapter: string) {
+    try {
+        for (let [key, value] of Object.entries(files)) {
+            const fpath = getCosmFilePath(prefix, uid, lesson, chapter, key)
+            await _saveRustCode(fpath, value);
+        }
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+function getCosmFilePath(prefix: string, uid: string, lesson: string, chapter: string, filename: string): string {
+    return path.join(process.cwd(), prefix, `${uid}/${lesson}/${chapter}/src/${filename}`)
+}
+
+export { sleep, extracted, b64ToStr, saveRustCodeFiles, getCosmFilePath };

@@ -19,6 +19,7 @@ import { errorConverter, errorHandler } from "./middlewares/error";
 import { APIError } from "@d3lab/types";
 
 const app = express();
+app.locals.cargoPrefix = 'cargo-projects/cosm'
 
 app.use(apiLimiter);
 app.use(express.urlencoded({ extended: true }));

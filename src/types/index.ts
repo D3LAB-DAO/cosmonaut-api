@@ -1,7 +1,7 @@
 type Base64 = string;
 type CargoReturn = string | null;
 
-interface FmtFiles {
+interface RustFiles {
     [key: string]: Base64
 }
 
@@ -48,7 +48,7 @@ interface PassportProfile {
 export {
     Base64,
     CargoReturn,
-    FmtFiles,
+    RustFiles,
     APIError,
     PassportProfile
 };
