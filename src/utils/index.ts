@@ -1,6 +1,5 @@
 import path from "path";
-import fs, { write } from "fs";
-import { writeFile } from "fs/promises";
+import { writeFile, readFile, readdir } from "fs/promises";
 import { Base64, RustFiles } from "@d3lab/types";
 
 function sleep(ms: number) {
@@ -9,46 +8,48 @@ function sleep(ms: number) {
     });
 }
 
-function extracted(
-    root: string,
-    userPath: string,
-    type: string
-): string | undefined {
-    const target = path.join(root, userPath);
-    try {
-        console.log(target);
-        return fs.readFileSync(`${target}/${type}`, { encoding: "utf8" });
-    } catch (err) {
-        console.error(err);
-    }
-}
-
 const b64ToStr = (raw: Base64): string => {
     return Buffer.from(raw, "base64").toString("utf-8");
 };
 
-async function _saveCode(path: string, file: Base64) {
+async function _saveCode(path: string, code: Base64) {
     try {
-        const stringCode = b64ToStr(file).trim();
+        const stringCode = b64ToStr(code).trim();
         await writeFile(path, stringCode);
     } catch (err) {
         console.error(err);
     }
 }
 
-async function saveCodeFiles(files: RustFiles, prefix: string, uid: string, lesson: string, chapter: string) {
+async function saveCodeFiles(files: RustFiles, dirpath: string) {
     try {
-        for (let [key, value] of Object.entries(files)) {
-            const fpath = getCosmFilePath(prefix, uid, lesson, chapter, key)
-            await _saveCode(fpath, value);
+        for (let [filename, code] of Object.entries(files)) {
+            const fpath = path.join(dirpath, filename);
+            await _saveCode(fpath, code);
         }
     } catch (err) {
         console.error(err);
     }
 }
 
-function getCosmFilePath(prefix: string, uid: string, lesson: string, chapter: string, filename: string): string {
-    return path.join(process.cwd(), prefix, `${uid}/${lesson}/${chapter}/src/${filename}`)
+async function lodeCodeFiles(projPath: string): Promise<RustFiles | undefined> {
+    try {
+        const filelist = await readdir(projPath)
+        const result: RustFiles = {}
+        for (let fname of filelist) {
+            let fpath = path.join(projPath, fname)
+            let code = await readFile(fpath)
+            result[fname] = code.toString('base64')
+        }
+        return result
+    } catch(err) {
+        console.log(err)
+    }
 }
 
-export { sleep, extracted, b64ToStr, saveCodeFiles, getCosmFilePath };
+export {
+    sleep,
+    b64ToStr,
+    lodeCodeFiles,
+    saveCodeFiles,
+};

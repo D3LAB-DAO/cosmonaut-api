@@ -1,6 +1,6 @@
 import httpStatus from 'http-status';
 import { NextFunction, Request, Response } from "express";
-import { rust } from "@d3lab/services";
+import { rust, cosm, getUid } from "@d3lab/services";
 import { RustFiles, APIError } from "@d3lab/types";
 import conf from "@d3lab/config";
 import {saveCodeFiles} from '@d3lab/utils'
@@ -29,23 +29,19 @@ const fmtCodes = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 const clippy = async (req: Request, res: Response, next: NextFunction) => {
-    let uid;
-    if (req.session.passport) {
-        uid = req.session.passport.user.issuer + "-" + req.session.passport.user.id
-    }
+    const uid = getUid(req)
     if (uid === undefined) {
         return next(new APIError(httpStatus.BAD_REQUEST, "your login session was expired"));
     }
-    const lesson = req.body.lesson ? req.body.lesson : undefined;
-    const chapter = req.body.chapter ? req.body.chapter : undefined;
-    if (lesson === undefined || chapter === undefined) {
+    if (!cosm.checkTarget(req)) {
         return next(new APIError(httpStatus.BAD_REQUEST, "you must fill lesson & chapter name"))
     }
 
-    await saveCodeFiles(req.body['files'], req.app.locals.cargoPrefix, uid, lesson, chapter)
+    const dirpath = cosm.getCosmFilePath(req.app.locals.cargoPrefix, uid, req.body.lesson, req.body.chapter)
+    await saveCodeFiles(req.body['files'], dirpath)
 
     try {
-        const result = await rust.cosmRun("clippy", uid, lesson, chapter);
+        const result = await rust.cosmRun("clippy", uid, req.body.lesson, req.body.chapter);
         res.json({result})
 
     } catch (err) {
