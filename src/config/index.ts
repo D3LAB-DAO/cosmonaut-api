@@ -24,7 +24,8 @@ const envScheme = joi.object({
     GOOGLE_CLIENT_SECRET: joi.string().required(),
     GITHUB_CLIENT_ID: joi.string().required(),
     GITHUB_CLIENT_SECRET: joi.string().required(),
-    FRONT_HOST_ADDR: joi.string().required(),
+    FRONT_MAIN_ADDR: joi.string().required(),
+    FRONT_LOGIN_ADDR: joi.string().required(),
     REQ_TIMEOUT: joi.string().required(),
     RUST_TIMEOUT: joi.string().required()
 }).unknown()
@@ -53,9 +54,8 @@ const pg = {
 }
 
 const front = {
-    host: envs.FRONT_HOST_ADDR,
-    login: envs.FRONT_HOST_ADDR + "/login.html",
-    main: envs.FRONT_HOST_ADDR + "/index.html"
+    main: envs.FRONT_MAIN_ADDR,
+    login: envs.FRONT_LOGIN_ADDR
 }
 
 export default {

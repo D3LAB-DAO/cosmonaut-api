@@ -42,8 +42,8 @@ router.get("/logout", (req, res, next) => {
         if (err) {
             return next(err);
         }
-        if (!conf.front.host) {
-            console.error("You need to set frontend root address");
+        if (!conf.front.main) {
+            console.error("You need to set frontend main address");
         } else {
             req.session.destroy((err) => {})
             res.redirect(conf.front.main);
