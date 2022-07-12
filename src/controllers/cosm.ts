@@ -96,5 +96,38 @@ const cosmBuild = async (req: Request, res: Response, next: NextFunction) => {
     }
 };
 
+const cosmLoadCodes = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const uid = getUid(req);
+    if (uid === undefined) {
+        return next(
+            new APIError(
+                httpStatus.BAD_REQUEST,
+                "your login session was expired"
+            )
+        );
+    }
+    if (req.query.lesson && req.query.chapter) {
+        const srcpath = cosm.getCosmFilePath(
+            req.app.locals.cargoPrefix,
+            uid,
+            req.query.lesson as string,
+            req.query.chapter as string,
+            true
+        );
+        const files = await lodeCodeFiles(srcpath);
+        res.json(files);
+    } else {
+        return next(
+            new APIError(
+                httpStatus.BAD_REQUEST,
+                "you must fill lesson & chapter name"
+            )
+        );
+    }
+};
 
 export { cosminit, cosmBuild, cosmLoadCodes };

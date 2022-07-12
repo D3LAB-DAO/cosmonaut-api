@@ -12,4 +12,7 @@ router.route('/init')
 router.route('/build')
     .post(cosm.cosmBuild)
 
+router.route('/code')
+    .get(cosm.cosmLoadCodes)
+
 export default router;
