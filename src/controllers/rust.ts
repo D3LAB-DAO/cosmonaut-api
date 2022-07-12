@@ -37,11 +37,12 @@ const clippy = async (req: Request, res: Response, next: NextFunction) => {
         return next(new APIError(httpStatus.BAD_REQUEST, "you must fill lesson & chapter name"))
     }
 
-    const dirpath = cosm.getCosmFilePath(req.app.locals.cargoPrefix, uid, req.body.lesson, req.body.chapter)
-    await saveCodeFiles(req.body['files'], dirpath)
+    const srcpath = cosm.getCosmFilePath(req.app.locals.cargoPrefix, uid, req.body.lesson, req.body.chapter, true)
+    await saveCodeFiles(req.body['files'], srcpath)
 
+    const dirpath = srcpath.split('/src')[0]
     try {
-        const result = await rust.cosmRun("clippy", uid, req.body.lesson, req.body.chapter);
+        const result = await rust.cosmRun("clippy", dirpath);
         res.json({result})
 
     } catch (err) {

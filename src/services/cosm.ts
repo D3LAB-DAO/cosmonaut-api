@@ -5,9 +5,13 @@ function getCosmFilePath(
     prefix: string,
     uid: string,
     lesson: string,
-    chapter: string
+    chapter: string,
+    withSrc: boolean
 ): string {
-    return path.join(process.cwd(), prefix, `${uid}/${lesson}/${chapter}/src`);
+    if (withSrc) {
+        return path.join(process.cwd(), prefix, `${uid}/lesson${lesson}/ch${chapter}/src`);
+    }
+    return path.join(process.cwd(), prefix, `${uid}/lesson${lesson}/ch${chapter}`);
 }
 
 function checkTarget(req: Request): boolean {

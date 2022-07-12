@@ -12,9 +12,9 @@ global.MY_CWD = process.cwd();
 
         const prefix = 'cargo-projects/cosm'
         const userid = 'github-41176085'
-        const lesson = 'lesson1'
-        const chapter = 'ch5'
-        const projPath =  cosm.getCosmFilePath(prefix, userid, lesson, chapter)
+        const lesson = '1'
+        const chapter = '5'
+        const projPath =  cosm.getCosmFilePath(prefix, userid, lesson, chapter, true)
         try {
             /*
                FIXME: debug 출력메시지는 stderr로 나옴. cliipy나 build 시 오류 발생하면 exit_code: 2 -> try to merge stderr with stdout using "&>"

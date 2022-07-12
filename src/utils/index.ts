@@ -21,10 +21,10 @@ async function _saveCode(path: string, code: Base64) {
     }
 }
 
-async function saveCodeFiles(files: RustFiles, dirpath: string) {
+async function saveCodeFiles(files: RustFiles, projPath: string) {
     try {
         for (let [filename, code] of Object.entries(files)) {
-            const fpath = path.join(dirpath, filename);
+            const fpath = path.join(projPath, filename);
             await _saveCode(fpath, code);
         }
     } catch (err) {
@@ -43,7 +43,7 @@ async function lodeCodeFiles(projPath: string): Promise<RustFiles | undefined> {
         }
         return result
     } catch(err) {
-        console.log(err)
+        console.error(err)
     }
 }
 

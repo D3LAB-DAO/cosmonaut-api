@@ -45,15 +45,11 @@ function rustfmt2(raw: Base64): Promise<Base64> {
 
 async function cosmRun(
     cmd: string,
-    owner: string,
-    proj: string,
-    lecture: string
+    projPath: string
 ): Promise<string> {
     let subprocess = spawn("make", [
         cmd,
-        `OWNER=${owner}`,
-        `PROJ=${proj}`,
-        `LEC=${lecture}`,
+        `TARGET_PATH=${projPath}`,
     ]);
     let result = "";
     let error = "";
