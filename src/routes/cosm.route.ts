@@ -12,7 +12,4 @@ router.route('/init')
 router.route('/build')
     .post(cosm.cosmBuild)
 
-router.route('/clippy')
-    .post(cosm.clippy)
-
 export default router;

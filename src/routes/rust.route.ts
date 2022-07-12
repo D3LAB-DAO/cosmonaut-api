@@ -12,4 +12,7 @@ router.route('/fmt')
     })
     .post(rust.fmtCodes)
 
+router.route('/clippy')
+    .post(rust.clippy)
+
 export default router;

@@ -49,7 +49,7 @@ if (conf.nodeEnv == "production") {
         // sessOpt.cookie.secure = true;
     }
     const accessLogStream = createWriteStream(
-        path.join(__dirname, "..", "..", "logs/prod", "api-access.log"),
+        path.join(process.cwd(), "logs/prod", "api-access.log"),
         { flags: "a+" }
     );
     app.use(morgan("combined", { stream: process.stdout }));

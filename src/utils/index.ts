@@ -27,7 +27,7 @@ const b64ToStr = (raw: Base64): string => {
     return Buffer.from(raw, "base64").toString("utf-8");
 };
 
-async function _saveRustCode(path: string, file: Base64) {
+async function _saveCode(path: string, file: Base64) {
     try {
         const stringCode = b64ToStr(file).trim();
         await writeFile(path, stringCode);
@@ -36,11 +36,11 @@ async function _saveRustCode(path: string, file: Base64) {
     }
 }
 
-async function saveRustCodeFiles(files: RustFiles, prefix: string, uid: string, lesson: string, chapter: string) {
+async function saveCodeFiles(files: RustFiles, prefix: string, uid: string, lesson: string, chapter: string) {
     try {
         for (let [key, value] of Object.entries(files)) {
             const fpath = getCosmFilePath(prefix, uid, lesson, chapter, key)
-            await _saveRustCode(fpath, value);
+            await _saveCode(fpath, value);
         }
     } catch (err) {
         console.error(err);
@@ -51,4 +51,4 @@ function getCosmFilePath(prefix: string, uid: string, lesson: string, chapter: s
     return path.join(process.cwd(), prefix, `${uid}/${lesson}/${chapter}/src/${filename}`)
 }
 
-export { sleep, extracted, b64ToStr, saveRustCodeFiles, getCosmFilePath };
+export { sleep, extracted, b64ToStr, saveCodeFiles, getCosmFilePath };
