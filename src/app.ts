@@ -1,4 +1,3 @@
-import { createWriteStream } from "fs";
 import express from "express";
 import cors from "cors";
 import morgan from "morgan";
@@ -10,16 +9,15 @@ import { createClient } from "redis";
 import connectredis from "connect-redis";
 import httpStatus from "http-status";
 import passport from "passport";
-import path from 'path';
 
-import conf from "./config";
+import { default as conf, log } from "./config";
 import route from "./routes";
 import { apiLimiter } from "./middlewares/rate-limit";
 import { errorConverter, errorHandler } from "./middlewares/error";
 import { APIError } from "@d3lab/types";
 
 const app = express();
-app.locals.cargoPrefix = 'cargo-projects/cosm'
+app.locals.cargoPrefix = "cargo-projects/cosm";
 
 app.use(apiLimiter);
 app.use(express.urlencoded({ extended: true }));
@@ -27,19 +25,19 @@ app.use(express.json());
 
 app.use(cookieParser());
 const RedisStore = connectredis(session);
-let redisClient = createClient({ legacyMode: true });
+let redisClient = createClient({ legacyMode: true, url: conf.redis.url });
 redisClient.connect().catch(console.error);
 const sessOpt: session.SessionOptions = {
     store: new RedisStore({ client: redisClient }),
     saveUninitialized: false,
     secret: conf.sessSecret as string,
     resave: false,
-    cookie: {secure: false},
+    cookie: { secure: false },
 };
 
 const corsOpts = {
     origin: conf.corsWhiteList,
-    credentials: true
+    credentials: true,
 };
 if (conf.nodeEnv == "production") {
     app.use(cors(corsOpts));
@@ -48,14 +46,19 @@ if (conf.nodeEnv == "production") {
         sessOpt.cookie.maxAge = 1000 * 60 * 60 * 2;
         // sessOpt.cookie.secure = true;
     }
-    const accessLogStream = createWriteStream(
-        path.join(process.cwd(), "logs/prod", "api-access.log"),
-        { flags: "a+" }
+
+    app.use(
+        morgan("combined", {
+            skip: (req, res) => {
+                return res.statusCode < 400;
+            },
+        })
     );
-    app.use(morgan("combined", { stream: process.stdout }));
+    // app.use(morgan("common", { stream: log.accessLogStream}));
 } else {
     app.use(cors(corsOpts));
     app.use(morgan("dev")); //log to console on development
+    // app.use(morgan("common", { stream: log.accessLogStream }));
 }
 
 app.use(session(sessOpt));

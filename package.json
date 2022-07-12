@@ -11,6 +11,7 @@
     "pm2:dev": "pm2 start pm2-env.json --name cosmonaut-api --env development",
     "pm2:kill": "pm2 kill",
     "pm2:stop": "pm2 stop cosmonaut-api",
+    "pm2:monitor": "pm2 logs",
     "build": "tsc --project tsconfig.prod.json",
     "start": "ts-node -r tsconfig-paths/register src/index.ts",
     "cargo": "ts-node -r tsconfig-paths/register src/cargo.ts",
