@@ -1,6 +1,7 @@
 services:
   cosmonaut:
     image: cosmonaut
+    container_name: cosmonaut-api-1
     restart: always
     build:
       context: .
@@ -8,6 +9,8 @@ services:
     depends_on:
       - pgdb
       - redis-sess
+    environment:
+      - COMPOSE=true
     env_file:
       - .env
     ports:

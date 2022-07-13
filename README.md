@@ -3,16 +3,13 @@
 2. Setup PostgreSQL & make account, database (Use db/schema)
 3. Set .env (Refer to envSchema of config)
 4. Build cosmo-rust image to build contract & Run
-```sh
-docker build -f rust.Dockerfile --build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g) -t cosmo-rust:1.0 .
-docker run -it --name jsrust cosmo-rust:1.0
-```
-# Run
+
+# Local Run
 
 ```bash
 npm start # Run wihtout build for only dev purpose
 ```
-## 1) DB
+## Local DB setting
 ```sh
 # Initialization
 docker run -d -p 5432:5432 --name <pg_container_name> -e POSTGRES_USER=<id> -e POSTGRES_PASSWORD=<pw> postgres
@@ -23,19 +20,46 @@ docker exec -it <pg_container_name> psql -U <id> -d cosmonaut
 docker exec -it <redis_container_name> redis-cli
 ```
 
-# Testbed
+# Docker Compose testbed
+## 1) set .env
 ```sh
-docker build -f rust.Dockerfile --build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g) -t cosmo-rust:1.0 .
-docker run -it --name jsrust cosmo-rust:1.0
+PORT=3334
+LOCAL_RUST_SET=false
+SESS_SECRET=YOURSECRETKEYGOESHERE
+PGHOST=pgdb
+PGPORT=5432
+PGUSER=ljs
+PGPASSWORD=secret
+PGDATABASE=cosmonaut
+REDISHOST=redis-sess
+REDISPORT=6379
+REQ_TIMEOUT=5000
+RUST_TIMEOUT=4000
+TS_NODE_PROJECT=./tsconfig.prod.json
+FRONT_HOST_ADDR=
+FRONT_MAIN_ADDR=
+FRONT_LOGIN_ADDR=
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
+```
+## 2) build cosmo-rust image
+```sh
+docker build -f rust.Dockerfile -t cosmo-rust:dind .
 docker compose build
-docker compose up
+```
 
-# docker build -t cosmonaut .
-# docker run -it --rm --env-file ./.env.compose cosmonaut bash
+## 3) Use docker compose to serve
+```sh
+docker compose up # start app
+docker compose down # stop app
 ```
 
 # Flow
 ```
-make cosm-init
-npm run dist-test
+docker run -it --rm --volumes-from cosmonaut-api-1 -w /workspace cosmo-rust:dind bash
+make cosm-init TARGET_PATH="cosm/github-111/lesson1/ch5"
+make cosm-build TARGET_PATH="/workspace/cargo-projects/cosm/github-111/lesson1/ch5"
+
 ```
