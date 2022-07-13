@@ -31,7 +31,8 @@ const envScheme = joi.object({
     FRONT_MAIN_ADDR: joi.string().required(),
     FRONT_LOGIN_ADDR: joi.string().required(),
     REQ_TIMEOUT: joi.string().required(),
-    RUST_TIMEOUT: joi.string().required()
+    RUST_TIMEOUT: joi.string().required(),
+    TS_NODE_PROJECT: joi.string().required()
 }).unknown()
 
 const {value: envs, error: err} = envScheme.validate(process.env)
