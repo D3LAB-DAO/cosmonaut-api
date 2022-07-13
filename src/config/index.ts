@@ -2,7 +2,10 @@ import joi from 'joi';
 import path from 'path';
 import * as dotenv from 'dotenv';
 if (process.env.NODE_ENV !== 'production') {
-    dotenv.config({path: path.join(process.cwd(), '.env.dev')});
+    if (process.env.COMPOSE) {
+    } else {
+        dotenv.config({path: path.join(process.cwd(), '.env.dev')});
+    }
 } else {
     dotenv.config({path: path.join(process.cwd(), '.env')});
 }

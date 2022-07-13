@@ -2,16 +2,15 @@
 1. Setup Redis
 2. Setup PostgreSQL & make account, database (Use db/schema)
 3. Set .env (Refer to envSchema of config)
-4. Build cosm-rust image to build contract & Run
+4. Build cosmo-rust image to build contract & Run
 ```sh
-docker build --build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g) -t cosmo-rust:1.0 .
+docker build -f rust.Dockerfile --build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g) -t cosmo-rust:1.0 .
 docker run -it --name jsrust cosmo-rust:1.0
 ```
 # Run
 
 ```bash
 npm start # Run wihtout build for only dev purpose
-make cosm-build OWNER="tkxkd0159" PROJ="ch3" LEC="lesson1"
 ```
 ## 1) DB
 ```sh
@@ -22,6 +21,16 @@ docker run -d -p 6379:6379 --name <redis_container_name> redis
 # Attach
 docker exec -it <pg_container_name> psql -U <id> -d cosmonaut
 docker exec -it <redis_container_name> redis-cli
+```
+
+# Testbed
+```sh
+docker build -f rust.Dockerfile --build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g) -t cosmo-rust:1.0 .
+docker run -it --name jsrust cosmo-rust:1.0
+docker compose up
+
+# docker build -t cosmonaut .
+# docker run -it --rm --env-file ./.env.compose cosmonaut bash
 ```
 
 # Flow

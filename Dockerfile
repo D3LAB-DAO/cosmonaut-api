@@ -1,13 +1,15 @@
-FROM rust:1.61
+FROM node AS builder
+WORKDIR /workspace
+COPY src ./src
+COPY package.json package-lock.json .env.compose tsconfig.prod.json ./
+RUN npm ci
+RUN npm run build
 
-RUN rustup update
-RUN rustup component add clippy && rustup component add rustfmt
-
-ARG USER_ID
-ARG GROUP_ID
-
-RUN addgroup --gid $GROUP_ID ljs
-RUN adduser --disabled-password --gecos '' --uid $USER_ID --gid $GROUP_ID ljs
-USER ljs
-
-CMD ["/bin/bash"]
+FROM node
+WORKDIR /workspace
+RUN apt-get update && apt-get install docker.io -y
+COPY cargo-projects ./cargo-projects
+COPY package.json package-lock.json .env.compose Makefile tsconfig.prod.json pm2-env.json ./
+RUN npm ci --omit=dev
+COPY --from=builder /workspace/dist/src ./dist/src
+CMD ["npm", "run", "pm2:dev"]

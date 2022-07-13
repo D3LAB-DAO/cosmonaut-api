@@ -49,7 +49,7 @@ codeFmtBtn.addEventListener("click", async (e) => {
         if (res.redirected) {
             window.location.replace(data.url)
         } else {
-            wasmCode.value = atob(res.result.file1);
+            wasmCode.value = atob(data.result.file1);
 
         }
 

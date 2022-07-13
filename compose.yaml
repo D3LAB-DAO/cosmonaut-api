@@ -1,0 +1,49 @@
+services:
+  cosmonaut:
+    image: cosmonaut
+    restart: always
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    depends_on:
+      - pgdb
+      - redis-sess
+    env_file:
+      - .env.compose
+    ports:
+      - 3334:3334
+    networks:
+      - mytest
+    volumes:
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+  redis-sess:
+    image: redis
+    restart: always
+    ports:
+      - 6380:6379
+    networks:
+      - mytest
+  pgdb:
+    image: postgres
+    restart: always
+    ports:
+      - 5433:5432
+    networks:
+      - mytest
+    environment:
+      - POSTGRES_USER=ljs
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=cosmonaut
+    volumes:
+      - pgdb:/var/lib/postgresql/data
+      - ./compose.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  pgdb:
+    driver: local
+
+networks:
+  mytest:
+    driver: bridge
