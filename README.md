@@ -46,7 +46,7 @@ GITHUB_CLIENT_SECRET=
 ```
 ## 2) build cosmo-rust image
 ```sh
-docker build -f rust.Dockerfile -t cosmo-rust:dind .
+docker build -f compose.rust.Dockerfile -t cosmo-rust:dind .
 docker compose build
 ```
 
