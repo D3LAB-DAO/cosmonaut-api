@@ -27,6 +27,7 @@ docker exec -it <redis_container_name> redis-cli
 ```sh
 docker build -f rust.Dockerfile --build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g) -t cosmo-rust:1.0 .
 docker run -it --name jsrust cosmo-rust:1.0
+docker compose build
 docker compose up
 
 # docker build -t cosmonaut .

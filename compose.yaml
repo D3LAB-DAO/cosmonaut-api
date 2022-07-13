@@ -2,14 +2,14 @@ services:
   cosmonaut:
     image: cosmonaut
     restart: always
-    # build:
-    #   context: .
-    #   dockerfile: Dockerfile
+    build:
+      context: .
+      dockerfile: Dockerfile
     depends_on:
       - pgdb
       - redis-sess
     env_file:
-      - .env.compose
+      - .env
     ports:
       - 3334:3334
     networks:
@@ -18,6 +18,9 @@ services:
       - type: bind
         source: /var/run/docker.sock
         target: /var/run/docker.sock
+      - type: volume
+        source: cosmproj
+        target: /workspace/cargo-projects
   redis-sess:
     image: redis
     restart: always
@@ -42,6 +45,8 @@ services:
 
 volumes:
   pgdb:
+    driver: local
+  cosmproj:
     driver: local
 
 networks:

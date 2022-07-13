@@ -32,7 +32,7 @@ const sessOpt: session.SessionOptions = {
     saveUninitialized: false,
     secret: conf.sessSecret as string,
     resave: false,
-    cookie: { secure: false, sameSite: "lax" },
+    cookie: { secure: false, sameSite: "lax" }
 };
 
 const corsOpts = {
@@ -55,10 +55,12 @@ if (conf.nodeEnv == "production") {
         })
     );
     // FIXME: refresh bug occur when use it on Ubuntu Focal. Windows 10, MacOS monterey is fine
-    // app.use(morgan("common", { stream: log.accessLogStream}));
+    app.use(morgan("common", { stream: log.accessLogStream}));
 } else {
     app.use(cors(corsOpts));
     app.use(morgan("dev")); //log to console on development
+    // app.use(morgan("common", { stream: log.accessLogStream}));
+
 }
 
 app.use(session(sessOpt));
@@ -71,6 +73,7 @@ app.use(compression());
 app.use(
     "/",
     (req, res, next) => {
+        console.log("** session ID : ", req.sessionID, conf.nodeEnv)
         next();
     },
     route
