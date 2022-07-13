@@ -63,7 +63,7 @@ export default {
     port: envs.PORT,
     sessSecret: envs.SESS_SECRET,
     isLocalRust: envs.LOCAL_RUST_SET,
-    corsWhiteList: ["http://127.0.0.1:5501"],
+    corsWhiteList: [/127\.0\.0\.1/],
     timeout,
     redis,
     pg,

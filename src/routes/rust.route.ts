@@ -4,7 +4,7 @@ import conf from '@d3lab/config'
 import { ensureLoggedIn } from "@d3lab/middlewares/auth";
 
 const router = express.Router();
-router.use(ensureLoggedIn(conf.front.login))
+router.use(ensureLoggedIn('/auth/login'))
 
 router.route('/fmt')
     .get((req, res) => {
