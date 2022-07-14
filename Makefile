@@ -9,7 +9,9 @@ COMPOSE_COSM_IMG = "cosmo-rust:dind"
 
 
 rustfmt:
-	@docker run --rm -i -a stdout $(DOCKER_IMG) rustfmt;
+	@if [ ${COMPOSE} = "true" ]; \
+	then docker run --rm -i -a stdout $(COMPOSE_COSM_IMG) rustfmt; \
+	else docker run --rm -i -a stdout $(DOCKER_IMG) rustfmt; fi
 
 cosm-init:
 	@if [ ${COMPOSE} = "true" ]; \
