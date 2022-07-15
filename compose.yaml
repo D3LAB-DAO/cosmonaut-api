@@ -16,7 +16,7 @@ services:
     ports:
       - 3334:3334
     networks:
-      - mytest
+      - myproxy
     volumes:
       - type: bind
         source: /var/run/docker.sock
@@ -30,14 +30,14 @@ services:
     ports:
       - 6380:6379
     networks:
-      - mytest
+      - myproxy
   pgdb:
     image: postgres
     restart: always
     ports:
       - 5433:5432
     networks:
-      - mytest
+      - myproxy
     environment:
       - POSTGRES_USER=ljs
       - POSTGRES_PASSWORD=secret
@@ -53,5 +53,6 @@ volumes:
     driver: local
 
 networks:
-  mytest:
+  myproxy:
     driver: bridge
+    name: cosmonaut_proxy

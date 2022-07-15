@@ -6,7 +6,7 @@ import { log } from "./config";
 let server: Server;
 
 async function init() {
-    server = app.listen(Number(process.env.PORT), '0.0.0.0', () => {
+    server = app.listen(Number(process.env.PORT), process.env.HOST_ADDR as string, () => {
         log.opLogger.info(`Start server at ${process.env.PORT}`);
         console.log(`Listening to ${process.env.PORT}`);
     });

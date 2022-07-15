@@ -12,6 +12,7 @@ if (process.env.NODE_ENV !== 'production') {
 import './auth'
 
 const envScheme = joi.object({
+    HOST_ADDR: joi.string().required(),
     PORT: joi.string().min(4).max(5).required(),
     NODE_ENV: joi.string().valid('development', 'production').required(),
     LOCAL_RUST_SET: joi.string().valid('true', 'false').required(),
