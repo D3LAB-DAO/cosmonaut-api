@@ -15,10 +15,6 @@ router.get("/check", (req, res) => {
     }
 })
 
-router.get("/login", (req, res, next) => {
-    res.status(302).send({url: conf.front.login})
-});
-
 router.get("/login/federated/google", passport.authenticate("google"));
 
 router.get(

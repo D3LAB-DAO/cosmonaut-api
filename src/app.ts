@@ -9,9 +9,11 @@ import { createClient } from "redis";
 import connectredis from "connect-redis";
 import httpStatus from "http-status";
 import passport from "passport";
+import timeout from 'connect-timeout';
 
 import { default as conf, log } from "./config";
-import route from "./routes";
+import baseRoute from "./routes";
+import v1Route from "./routes/v1";
 import { apiLimiter } from "./middlewares/rate-limit";
 import { errorConverter, errorHandler } from "./middlewares/error";
 import { APIError } from "@d3lab/types";
@@ -67,13 +69,15 @@ app.locals.redis = redisClient;
 app.use(helmet());
 app.use(compression());
 
+app.use(timeout(conf.timeout.express));
 app.use(
     "/",
     (req, res, next) => {
         next();
     },
-    route
+    baseRoute
 );
+app.use('/v1', v1Route)
 
 app.use((req, res, next) => {
     next(new APIError(httpStatus.NOT_FOUND, "Not found"));
