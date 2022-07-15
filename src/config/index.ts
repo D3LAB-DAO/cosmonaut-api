@@ -3,8 +3,7 @@ import path from 'path';
 import * as dotenv from 'dotenv';
 
 if (process.env.NODE_ENV !== 'production') {
-    if (process.env.COMPOSE !== undefined) {
-    } else {
+    if (process.env.COMPOSE !== undefined) {} else {
         dotenv.config({path: path.join(process.cwd(), '.env.dev')});
     }
 } else {
@@ -28,12 +27,12 @@ const envScheme = joi.object({
     GOOGLE_CLIENT_SECRET: joi.string().required(),
     GITHUB_CLIENT_ID: joi.string().required(),
     GITHUB_CLIENT_SECRET: joi.string().required(),
-    FRONT_HOST_ADDR: joi.string().required(),
-    FRONT_MAIN_ADDR: joi.string().required(),
-    FRONT_LOGIN_ADDR: joi.string().required(),
     REQ_TIMEOUT: joi.string().required(),
     RUST_TIMEOUT: joi.string().required(),
-    TS_NODE_PROJECT: joi.string().required()
+    TS_NODE_PROJECT: joi.string().required(),
+    FRONT_HOST_ADDR: joi.string().required(),
+    FRONT_MAIN_ADDR: joi.string().required(),
+    FRONT_LOGIN_ADDR: joi.string().required()
 }).unknown()
 
 const {value: envs, error: err} = envScheme.validate(process.env)

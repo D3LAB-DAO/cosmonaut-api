@@ -6,7 +6,10 @@ const router = Router();
 
 router.get("/check", (req, res) => {
     if (req.isAuthenticated()) {
-        res.json({isLogin: true})
+        res.json({
+            info: req.user,
+            isLogin: true
+        })
     } else {
         res.json({isLogin: false})
     }

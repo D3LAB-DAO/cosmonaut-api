@@ -35,9 +35,9 @@ passport.use(
                         [provider, profile.id, new Date().toISOString()]
                     );
 
-                    return cb(null, { id: profile.id, issuer: provider });
+                    return cb(null, { id: profile.id, issuer: provider, displayName: profile.displayName });
                 } else {
-                    return cb(null, { id: profile.id, issuer: provider });
+                    return cb(null, { id: profile.id, issuer: provider, displayName: profile.displayName });
                 }
             } catch (error) {
                 cb(error);
@@ -78,9 +78,9 @@ passport.use(
                         [profile.provider, profile.id, new Date().toISOString()]
                     );
 
-                    return cb(null, { id: profile.id, issuer: profile.provider });
+                    return cb(null, { id: profile.id, issuer: profile.provider, displayName: profile.displayName });
                 } else {
-                    return cb(null, { id: profile.id, issuer: profile.provider });
+                    return cb(null, { id: profile.id, issuer: profile.provider, displayName: profile.displayName });
                 }
             } catch (error) {
                 cb(error);
@@ -94,7 +94,7 @@ passport.use(
 
 passport.serializeUser((user: Express.User, cb) => {
     process.nextTick(() => {
-        cb(null, { id: user.id, issuer: user.issuer });
+        cb(null, { id: user.id, issuer: user.issuer, username: user.displayName });
     });
 });
 

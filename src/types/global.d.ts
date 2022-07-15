@@ -9,6 +9,7 @@ declare global {
         interface User {
             id: string;
             issuer: string;
+            displayName: string;
         }
     }
 }
