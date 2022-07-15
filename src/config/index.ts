@@ -70,6 +70,7 @@ export default {
     sessSecret: envs.SESS_SECRET,
     isLocalRust: envs.LOCAL_RUST_SET,
     corsWhiteList: [/127\.0\.0\.1/, envs.FRONT_HOST_ADDR],
+    staticPath: path.join(process.cwd(), 'front-build'),
     timeout,
     redis,
     pg,

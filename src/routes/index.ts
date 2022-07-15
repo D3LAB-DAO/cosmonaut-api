@@ -11,7 +11,7 @@ const router = express.Router()
 router.use(timeout(conf.timeout.express));
 
 router.get('/', (req, res) => {
-    res.json({msg: 'Initial page', sessionID: req.sessionID});
+    res.sendFile(conf.staticPath + "/index.html")
 })
 
 const subRoutes = [
@@ -32,5 +32,9 @@ const subRoutes = [
 subRoutes.forEach((r) => {
     router.use(r.path, r.route);
 });
+
+router.get('*', (req, res) => {
+    res.sendFile(conf.staticPath + "/index.html")
+})
 
 export default router

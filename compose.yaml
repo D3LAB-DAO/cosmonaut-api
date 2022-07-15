@@ -21,6 +21,9 @@ services:
       - type: bind
         source: /var/run/docker.sock
         target: /var/run/docker.sock
+      - type: bind
+        source: <parent_dir>/cosmonaut-frontend/build
+        target: /workspace/front-build
       - type: volume
         source: cosmproj
         target: /workspace/cargo-projects
