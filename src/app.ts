@@ -11,7 +11,8 @@ import httpStatus from "http-status";
 import passport from "passport";
 
 import { default as conf, log } from "./config";
-import route from "./routes";
+import baseRoute from "./routes";
+import v1Route from "./routes/v1";
 import { apiLimiter } from "./middlewares/rate-limit";
 import { errorConverter, errorHandler } from "./middlewares/error";
 import { APIError } from "@d3lab/types";
@@ -73,8 +74,9 @@ app.use(
     (req, res, next) => {
         next();
     },
-    route
+    baseRoute
 );
+app.use("/v1", v1Route)
 
 app.use((req, res, next) => {
     next(new APIError(httpStatus.NOT_FOUND, "Not found"));
