@@ -42,7 +42,7 @@ const clippy = async (req: Request, res: Response, next: NextFunction) => {
 
     const dirpath = srcpath.split('/src')[0]
     try {
-        const result = await rust.cosmRun("clippy", dirpath);
+        const result = await cosm.Run("clippy", dirpath);
         res.json({result})
 
     } catch (err) {

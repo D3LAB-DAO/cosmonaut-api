@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import { Request, Response, NextFunction } from "express";
 import httpStatus from "http-status";
-import { rust, cosm, getUid } from "@d3lab/services";
+import { cosm, getUid } from "@d3lab/services";
 import { APIError } from "@d3lab/types";
 import { sleep, saveCodeFiles, lodeCodeFiles } from "@d3lab/utils";
 
@@ -37,7 +37,7 @@ const cosminit = async (req: Request, res: Response, next: NextFunction) => {
             ),
             "main.rs"
         );
-        await rust.cosmRun("cosm-init", genfilePath.split('/src')[0].split('/cargo-projects/')[1]);
+        await cosm.Run("cosm-init", genfilePath.split('/src')[0].split('/cargo-projects/')[1]);
         await sleep(1000);
         if (fs.existsSync(genfilePath)) {
             res.json({ isGen: true });
@@ -84,7 +84,7 @@ const cosmBuild = async (req: Request, res: Response, next: NextFunction) => {
 
     const dirpath = srcpath.split('/src')[0]
     try {
-        const data = await rust.cosmRun(
+        const data = await cosm.Run(
             "cosm-build",
             dirpath
         );

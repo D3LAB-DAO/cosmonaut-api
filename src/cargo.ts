@@ -31,9 +31,9 @@ global.MY_CWD = process.cwd();
             }
             console.log(result)
             // if (process.argv[2] == "clippy") {
-            //     res = await rust.cosmRun("clippy", userid, lesson, chapter);
+            //     res = await cosm.Run("clippy", userid, lesson, chapter);
             // } else {
-            //     res = await rust.cosmRun("cosm-build", userid, lesson, chapter);
+            //     res = await cosm.Run("cosm-build", userid, lesson, chapter);
             //     console.log(res)
             // }
 
