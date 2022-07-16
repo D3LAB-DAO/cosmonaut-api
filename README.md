@@ -3,6 +3,9 @@
 2. Setup PostgreSQL & make account, database (Use db/schema)
 3. Set .env (Refer to envSchema of config)
 4. Build cosmo-rust image to build contract & Run
+```sh
+docker build -f rust.Dockerfile --build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g) -t cosmo-rust:1.0 .
+```
 
 # Local Run
 
