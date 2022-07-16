@@ -14,7 +14,7 @@ import './auth'
 const envScheme = joi.object({
     HOST_ADDR: joi.string().required(),
     PORT: joi.string().min(4).max(5).required(),
-    NODE_ENV: joi.string().valid('development', 'production').required(),
+    NODE_ENV: joi.string().valid('development', 'production').default('development'),
     LOCAL_RUST_SET: joi.string().valid('true', 'false').required(),
     SESS_SECRET: joi.string().required(),
     PGHOST: joi.string().required(),
