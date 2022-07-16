@@ -10,13 +10,13 @@ const fmtCodes = async (req: Request, res: Response, next: NextFunction) => {
         const beforeFmtFiles: RustFiles = req.body["files"];
         const afterFmtFiles: RustFiles = {};
 
-        if (conf.isLocalRust === "true") {
+        if (conf.isLocalRust === true) {
             for (let [key, value] of Object.entries(beforeFmtFiles)) {
-                afterFmtFiles[key] = await rust.rustfmt(value);
+                afterFmtFiles[key] = await rust.rustfmt(value, conf.isLocalRust);
             }
         } else {
             for (let [key, value] of Object.entries(beforeFmtFiles)) {
-                afterFmtFiles[key] = await rust.rustfmt2(value);
+                afterFmtFiles[key] = await rust.rustfmt(value);
             }
         }
 

@@ -14,7 +14,7 @@ import './auth'
 const envScheme = joi.object({
     HOST_ADDR: joi.string().required(),
     PORT: joi.string().min(4).max(5).required(),
-    NODE_ENV: joi.string().valid('development', 'production').default('development'),
+    NODE_ENV: joi.string().valid('development', 'production', 'test').default('development'),
     LOCAL_RUST_SET: joi.string().valid('true', 'false').required(),
     SESS_SECRET: joi.string().required(),
     PGHOST: joi.string().required(),
@@ -68,7 +68,7 @@ export default {
     nodeEnv: envs.NODE_ENV,
     port: envs.PORT,
     sessSecret: envs.SESS_SECRET,
-    isLocalRust: envs.LOCAL_RUST_SET,
+    isLocalRust: JSON.parse(envs.LOCAL_RUST_SET),
     corsWhiteList: [/127\.0\.0\.1/, envs.FRONT_HOST_ADDR],
     timeout,
     redis,

@@ -12,7 +12,7 @@
     "pm2:stop": "pm2 stop cosmonaut-api",
     "pm2:monitor": "pm2 logs",
     "build": "tsc --project tsconfig.prod.json",
-    "start": "NODE_ENV='development' ts-node -r tsconfig-paths/register src/index.ts",
+    "start": "ts-node -r tsconfig-paths/register src/index.ts",
     "cargo": "ts-node -r tsconfig-paths/register src/cargo.ts",
     "dist-test": "TS_NODE_BASEURL='dist' NODE_ENV='production' TS_NODE_PROJECT='./tsconfig.prod.json' node -r tsconfig-paths/register dist/src/index.js",
     "boot": "ts-node -r tsconfig-paths/register src/boot/index.ts",
