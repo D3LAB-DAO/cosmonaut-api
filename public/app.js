@@ -45,13 +45,11 @@ codeFmtBtn.addEventListener("click", async (e) => {
     }
     try {
         let res = await fetch('http://127.0.0.1:3334/v1/rust/fmt', opt);
-        const data = await res.json();
-        console.log(data)
         if (res.redirected) {
-            window.location.replace(data.url)
+            window.location.replace(res.url)
         } else {
+            const data = await res.json()
             wasmCode.value = atob(data.result.file1);
-
         }
 
 

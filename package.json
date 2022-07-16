@@ -15,7 +15,8 @@
     "start": "ts-node -r tsconfig-paths/register src/index.ts",
     "cargo": "ts-node -r tsconfig-paths/register src/cargo.ts",
     "dist-test": "TS_NODE_BASEURL='dist' NODE_ENV='production' TS_NODE_PROJECT='./tsconfig.prod.json' node -r tsconfig-paths/register dist/src/index.js",
-    "boot": "ts-node -r tsconfig-paths/register src/boot/index.ts",
+    "boot": "ts-node -r tsconfig-paths/register src/boot/index.ts --init",
+    "boot:table": "ts-node -r tsconfig-paths/register src/boot/index.ts",
     "boot:dbtest": "ts-node -r tsconfig-paths/register src/boot/dbquery.ts"
   },
   "keywords": [],
