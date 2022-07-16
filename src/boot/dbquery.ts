@@ -17,14 +17,14 @@ import conf from "../config";
     }, 2000);
 
     try {
-        const res = await client.query("SELECT reward as user_asset FROM assets WHERE provider = 'google' AND subject = 'dummy'");
-        console.log(res.rows.length === 0)
-        console.log(res.rows[0]['user_asset'][1])
+        // const res = await client.query("SELECT reward as user_asset FROM assets WHERE provider = 'google' AND subject = 'dummy'");
+        // console.log(res.rows.length === 0)
+        // console.log(res.rows[0]['user_asset'][1])
 
         // await client.query("INSERT INTO users(provider, subject, lesson, chapter) VALUES($1, $2, $3, $4)", ['https://accounts.facebook.com', 'tkxkd0159', 1, 1])
         // await client.query("INSERT INTO federated_credentials(provider, subject, name, created_at) VALUES($1, $2, $3, $4)", ['https://accounts.facebook.com', 'tkxkd0159', 'JAESEUNG LEE', new Date().toISOString()])
-        // const res2 = await client.query("SELECT * FROM federated_credentials")
-        // console.log(res2.rows)
+        const res2 = await client.query("SELECT * FROM federated_credentials WHERE provider = 'google'")
+        console.log(res2.rows[0] === undefined)
 
 
         // Test function & procedure

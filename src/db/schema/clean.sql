@@ -3,3 +3,4 @@ DROP FUNCTION IF EXISTS get_chapter(TEXT, TEXT, INTEGER);
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS federated_credentials;
 DROP TABLE IF EXISTS assets;
+DROP TABLE IF EXISTS lesson_range;
