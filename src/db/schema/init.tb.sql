@@ -41,7 +41,7 @@ CREATE TABLE assets(
    lesson INTEGER NOT NULL,
    status TEXT NOT NULL,
    loc TEXT NOT NULL,
-   UNIQUE(provider, subject, lesson),
+   CONSTRAINT unique_asset UNIQUE(provider, subject, lesson),
    CONSTRAINT fk_unique_user
       FOREIGN KEY(provider, subject)
          REFERENCES federated_credentials(provider, subject) ON DELETE CASCADE

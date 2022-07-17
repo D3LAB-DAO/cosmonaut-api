@@ -5,7 +5,7 @@ import httpStatus from "http-status";
 import { cosm, getUid } from "@d3lab/services";
 import { APIError } from "@d3lab/types";
 import { sleep, saveCodeFiles, lodeCodeFiles, srcStrip } from "@d3lab/utils";
-import {getAssetLoc} from "@d3lab/models/cosm"
+import { getAssetLoc, setAssetLoc } from "@d3lab/models/cosm";
 
 const cosminit = async (req: Request, res: Response, next: NextFunction) => {
     const uid = getUid(req);
@@ -38,9 +38,17 @@ const cosminit = async (req: Request, res: Response, next: NextFunction) => {
             ),
             "main.rs"
         );
-        await cosm.Run("cosm-init", srcStrip(genfilePath).split('/cargo-projects/')[1]);
+        await cosm.Run(
+            "cosm-init",
+            srcStrip(genfilePath).split("/cargo-projects/")[1]
+        );
         await sleep(1000);
         if (fs.existsSync(genfilePath)) {
+            if (req.body.chapter === "1") {
+                await setAssetLoc(req, "start");
+            } else {
+                await setAssetLoc(req, "doing");
+            }
             res.json({ isGen: true });
         } else {
             res.json({ isGen: false });
@@ -83,12 +91,14 @@ const cosmBuild = async (req: Request, res: Response, next: NextFunction) => {
     );
     await saveCodeFiles(req.body["files"], srcpath);
 
-    const dirpath = srcStrip(srcpath)
+    const dirpath = srcStrip(srcpath);
     try {
-        const data = await cosm.Run(
-            "cosm-build",
-            dirpath
-        );
+        const data = await cosm.Run("cosm-build", dirpath);
+
+        if (true) {
+            setAssetLoc(req, "done");
+        }
+
         res.json({ answer: data });
     } catch (err) {
         if (typeof err === "string") {
@@ -131,14 +141,18 @@ const cosmLoadCodes = async (
     }
 };
 
-const getLessonPicture = async(req: Request, res: Response, next: NextFunction) => {
-    let assetSuffix = await getAssetLoc(req)
+const getLessonPicture = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    let assetSuffix = await getAssetLoc(req);
     if (assetSuffix instanceof Error) {
-        next(assetSuffix)
+        next(assetSuffix);
     } else {
-        const assetPath = path.join(process.cwd(), assetSuffix)
-        res.sendFile(assetPath)
+        const assetPath = path.join(process.cwd(), assetSuffix);
+        res.sendFile(assetPath);
     }
-}
+};
 
 export { cosminit, cosmBuild, cosmLoadCodes, getLessonPicture };

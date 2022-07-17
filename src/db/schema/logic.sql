@@ -1,3 +1,11 @@
+CREATE OR REPLACE PROCEDURE update_asset(newp TEXT, news TEXT, newl INTEGER, new_status TEXT, new_loc TEXT)
+LANGUAGE SQL
+BEGIN ATOMIC
+  INSERT INTO assets (provider, subject, lesson, status, loc) VALUES (newp, news, newl, new_status, new_loc)
+  ON CONFLICT ON CONSTRAINT unique_asset
+  DO UPDATE SET status = new_status, loc = new_loc WHERE assets.provider = newp AND assets.subject = news AND assets.lesson = newl;
+END;
+##
 CREATE OR REPLACE PROCEDURE update_lesson(newp TEXT, news TEXT, newl INTEGER, newc INTEGER)
 LANGUAGE SQL
 BEGIN ATOMIC
