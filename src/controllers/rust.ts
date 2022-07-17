@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import { rust, cosm, getUid } from "@d3lab/services";
 import { RustFiles, APIError } from "@d3lab/types";
 import conf from "@d3lab/config";
-import {saveCodeFiles} from '@d3lab/utils'
+import {saveCodeFiles, srcStrip} from '@d3lab/utils'
 
 const fmtCodes = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -40,7 +40,7 @@ const clippy = async (req: Request, res: Response, next: NextFunction) => {
     const srcpath = cosm.getCosmFilePath(req.app.locals.cargoPrefix, uid, req.body.lesson, req.body.chapter, true)
     await saveCodeFiles(req.body['files'], srcpath)
 
-    const dirpath = srcpath.split('/src')[0]
+    const dirpath = srcStrip(srcpath)
     try {
         const result = await cosm.Run("clippy", dirpath);
         res.json({result})

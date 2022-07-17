@@ -47,9 +47,32 @@ async function lodeCodeFiles(projPath: string): Promise<RustFiles | undefined> {
     }
 }
 
+function srcStrip(origin: string): string {
+    const target = '/src'
+    let cursor = 0
+    let isStart = true
+
+    while (true) {
+        let tmpCursor = origin.indexOf(target, isStart ? cursor : cursor + target.length)
+        isStart = false
+        if (tmpCursor === -1) {
+            break
+        } else {
+            cursor = tmpCursor
+        }
+    }
+
+    if (cursor <= 0 ) {
+        return origin
+    } else {
+        return origin.slice(0, cursor)
+    }
+}
+
 export {
     sleep,
     b64ToStr,
     lodeCodeFiles,
     saveCodeFiles,
+    srcStrip
 };
