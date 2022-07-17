@@ -29,7 +29,7 @@ async function getAssetLoc(req: Request): Promise<string | Error> {
 }
 
 async function setAssetLoc(req: Request, status: string) {
-    let pgClinet;
+    let pgClient;
     try {
         const issuer = req.session.passport?.user.issuer;
         const id = req.session.passport?.user.id;
@@ -41,8 +41,8 @@ async function setAssetLoc(req: Request, status: string) {
             asset_loc += `/${status}.jpg`
         }
 
-        pgClinet = await pg.getClient();
-        await pgClinet.query("CALL update_asset($1, $2, $3, $4, $5)", [
+        pgClient = await pg.getClient();
+        await pgClient.query("CALL update_asset($1, $2, $3, $4, $5)", [
             issuer,
             id,
             lesson,
@@ -52,8 +52,26 @@ async function setAssetLoc(req: Request, status: string) {
     } catch (error) {
         console.error(error);
     } finally {
-        pgClinet?.release();
+        pgClient?.release();
     }
 }
 
-export { getAssetLoc, setAssetLoc };
+async function checkLessonRange(lesson: number, chapter: number): Promise<boolean> {
+    let pgClient;
+    try {
+        pgClient = await pg.getClient();
+        const res = await pgClient.query("SELECT threshold FROM lesson_range WHERE lesson = $1", [lesson])
+        if (res.rows[0]['threshold'] >= chapter && chapter > 0) {
+            return true
+        } else {
+            return false
+        }
+    } catch (error) {
+        console.error(error);
+        return false
+    } finally {
+        pgClient?.release();
+    }
+}
+
+export { getAssetLoc, setAssetLoc, checkLessonRange };

@@ -57,4 +57,4 @@ CREATE TABLE lesson_range(
    PRIMARY KEY (lesson)
 );
 INSERT INTO lesson_range (lesson, threshold)
-VALUES(1, 5),(2, 5),(3, 5),(4, 5);
+VALUES(0, 5),(1, 5),(2, 5),(3, 5),(4, 5),(5, 5);

@@ -5,7 +5,7 @@ import httpStatus from "http-status";
 import { cosm, getUid } from "@d3lab/services";
 import { APIError } from "@d3lab/types";
 import { sleep, saveCodeFiles, lodeCodeFiles, srcStrip } from "@d3lab/utils";
-import { getAssetLoc, setAssetLoc } from "@d3lab/models/cosm";
+import { getAssetLoc, setAssetLoc, checkLessonRange } from "@d3lab/models/cosm";
 
 const cosminit = async (req: Request, res: Response, next: NextFunction) => {
     const uid = getUid(req);
@@ -17,7 +17,6 @@ const cosminit = async (req: Request, res: Response, next: NextFunction) => {
             )
         );
     }
-
     if (!cosm.checkTarget(req)) {
         return next(
             new APIError(
@@ -26,6 +25,10 @@ const cosminit = async (req: Request, res: Response, next: NextFunction) => {
             )
         );
     }
+    if (!await checkLessonRange(Number(req.body.lesson), Number(req.body.chapter))) {
+        return next(new APIError(httpStatus.BAD_REQUEST, "This lesson or chapter does not exist."))
+    }
+
 
     try {
         const genfilePath = path.join(
@@ -81,6 +84,9 @@ const cosmBuild = async (req: Request, res: Response, next: NextFunction) => {
             )
         );
     }
+    if (!await checkLessonRange(Number(req.body.lesson), Number(req.body.chapter))) {
+        return next(new APIError(httpStatus.BAD_REQUEST, "This lesson or chapter does not exist."))
+    }
 
     const srcpath = cosm.getCosmFilePath(
         req.app.locals.cargoPrefix,
@@ -121,6 +127,10 @@ const cosmLoadCodes = async (
             )
         );
     }
+    if (!await checkLessonRange(Number(req.query.lesson), Number(req.query.chapter))) {
+        return next(new APIError(httpStatus.BAD_REQUEST, "This lesson or chapter does not exist."))
+    }
+
     if (req.query.lesson && req.query.chapter) {
         const srcpath = cosm.getCosmFilePath(
             req.app.locals.cargoPrefix,
