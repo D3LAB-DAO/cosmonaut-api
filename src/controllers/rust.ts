@@ -1,9 +1,11 @@
+import { existsSync } from 'fs';
 import httpStatus from 'http-status';
 import { NextFunction, Request, Response } from "express";
 import { rust, cosm, getUid } from "@d3lab/services";
 import { RustFiles, APIError } from "@d3lab/types";
 import conf from "@d3lab/config";
 import {saveCodeFiles, srcStrip} from '@d3lab/utils'
+import {checkLessonRange} from '@d3lab/models/cosm'
 
 const fmtCodes = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -29,15 +31,21 @@ const fmtCodes = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 const clippy = async (req: Request, res: Response, next: NextFunction) => {
-    const uid = getUid(req)
-    if (uid === undefined) {
-        return next(new APIError(httpStatus.BAD_REQUEST, "your login session was expired"));
-    }
-    if (!cosm.checkTarget(req)) {
-        return next(new APIError(httpStatus.BAD_REQUEST, "you must fill lesson & chapter name"))
+    let uid;
+    const lesson = Number(req.body.lesson);
+    const chapter = Number(req.body.chapter);
+    try {
+        uid = getUid(req);
+        cosm.checkTarget(lesson, chapter);
+        await checkLessonRange(lesson, chapter);
+    } catch (error) {
+        return next(error);
     }
 
-    const srcpath = cosm.getCosmFilePath(req.app.locals.cargoPrefix, uid, req.body.lesson, req.body.chapter, true)
+    const srcpath = cosm.getCosmFilePath(req.app.locals.cargoPrefix, uid, lesson, chapter, true)
+    if (!existsSync(srcpath)) {
+        next(new Error("This chapter does not exist on you"))
+    }
     await saveCodeFiles(req.body['files'], srcpath)
 
     const dirpath = srcStrip(srcpath)

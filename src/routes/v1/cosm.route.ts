@@ -15,4 +15,7 @@ router.route('/code')
 router.route('/picture')
     .get(cosm.getLessonPicture)
 
+router.route('/progress')
+    .get(cosm.userProgress)
+
 export default router;

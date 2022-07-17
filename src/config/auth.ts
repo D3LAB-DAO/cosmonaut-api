@@ -32,7 +32,7 @@ passport.use(
                     );
                     await pgdb.query(
                         "INSERT INTO users (provider, subject, disp_name, lesson, chapter) VALUES($1, $2, $3, $4, $5)",
-                        [provider, profile.id, profile.displayName, 1, 1]
+                        [provider, profile.id, profile.displayName, 0, 1]
                     );
 
                     return cb(null, { id: profile.id, issuer: provider, displayName: profile.displayName });
@@ -75,7 +75,7 @@ passport.use(
                     );
                     await pgdb.query(
                         "INSERT INTO users (provider, subject, disp_name, lesson, chapter) VALUES($1, $2, $3, $4, $5)",
-                        [profile.provider, profile.id, profile.displayName, 1, 1]
+                        [profile.provider, profile.id, profile.displayName, 0, 1]
                     );
 
                     return cb(null, { id: profile.id, issuer: profile.provider, displayName: profile.displayName });

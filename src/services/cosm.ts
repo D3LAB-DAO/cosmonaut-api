@@ -1,39 +1,46 @@
-import path from 'path';
-import {Request} from 'express';
+import path from "path";
 import { spawn } from "child_process";
 import pidtree from "pidtree";
+import httpStatus from "http-status";
 import conf from "@d3lab/config";
+import { APIError } from "@d3lab/types";
 
 function getCosmFilePath(
     prefix: string,
     uid: string,
-    lesson: string,
-    chapter: string,
+    lesson: number,
+    chapter: number,
     withSrc: boolean
 ): string {
+    let cosmPath;
     if (withSrc) {
-        return path.join(process.cwd(), prefix, `${uid}/lesson${lesson}/chapter${chapter}/src`);
+        cosmPath = path.join(
+            process.cwd(),
+            prefix,
+            `${uid}/lesson${lesson}/chapter${chapter}/src`
+        );
+    } else {
+        cosmPath = path.join(
+            process.cwd(),
+            prefix,
+            `${uid}/lesson${lesson}/chapter${chapter}`
+        );
     }
-    return path.join(process.cwd(), prefix, `${uid}/lesson${lesson}/chapter${chapter}`);
+    return cosmPath
+
 }
 
-function checkTarget(req: Request): boolean {
-    const lesson = req.body.lesson ? req.body.lesson : undefined;
-    const chapter = req.body.chapter ? req.body.chapter : undefined;
-    if (lesson === undefined || chapter === undefined) {
-        return false;
+function checkTarget(lesson: number, chapter: number) {
+    if (isNaN(lesson) || isNaN(chapter)) {
+        throw new APIError(
+            httpStatus.BAD_REQUEST,
+            "you must fill lesson & chapter name"
+        );
     }
-    return true;
 }
 
-async function Run(
-    cmd: string,
-    projPath: string
-): Promise<string> {
-    let subprocess = spawn("make", [
-        cmd,
-        `TARGET_PATH=${projPath}`,
-    ]);
+async function Run(cmd: string, projPath: string): Promise<string> {
+    let subprocess = spawn("make", [cmd, `TARGET_PATH=${projPath}`]);
     let result = "";
     let error = "";
 
@@ -70,18 +77,14 @@ async function Run(
 
     return new Promise((resolve, reject) => {
         subprocess.on("close", (exitCode) => {
-            clearTimeout(subTimeout)
+            clearTimeout(subTimeout);
             if (result !== "") {
                 resolve(result);
             } else {
-                reject(error.split('make')[0]);
+                reject(error.split("make")[0]);
             }
         });
     });
 }
 
-export {
-    getCosmFilePath,
-    checkTarget,
-    Run
-}
+export { getCosmFilePath, checkTarget, Run };
