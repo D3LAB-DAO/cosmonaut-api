@@ -1,6 +1,5 @@
 import path from 'path';
 import joi from 'joi';
-import {createHash} from 'crypto';
 import * as dotenv from 'dotenv';
 
 if (process.env.NODE_ENV !== 'production') {
@@ -72,7 +71,6 @@ export default {
     sessSecret: envs.SESS_SECRET,
     isLocalRust: JSON.parse(envs.LOCAL_RUST_SET),
     corsWhiteList: [/127\.0\.0\.1/, envs.FRONT_HOST_ADDR],
-    assetPath: "/" + createHash('sha256').update('cosmonaut').digest('hex'),
     timeout,
     redis,
     pg,

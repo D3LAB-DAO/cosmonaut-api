@@ -1,5 +1,6 @@
 import path from "path";
 import { writeFile, readFile, readdir } from "fs/promises";
+import {createHash} from 'crypto';
 import { Base64, RustFiles } from "@d3lab/types";
 
 function sleep(ms: number) {
@@ -47,6 +48,12 @@ async function lodeCodeFiles(projPath: string): Promise<RustFiles | undefined> {
     }
 }
 
+function makeLessonPicturePath(lesson: number): string {
+    const dirPrefix = createHash('sha256').update(`cosmonaut-lesson${lesson}`).digest('hex') + `-${lesson}`
+    const dirPath = path.join('assets', dirPrefix)
+    return dirPath
+}
+
 function srcStrip(origin: string): string {
     const target = '/src'
     let cursor = 0
@@ -74,5 +81,6 @@ export {
     b64ToStr,
     lodeCodeFiles,
     saveCodeFiles,
-    srcStrip
+    srcStrip,
+    makeLessonPicturePath
 };

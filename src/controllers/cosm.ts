@@ -5,6 +5,7 @@ import httpStatus from "http-status";
 import { cosm, getUid } from "@d3lab/services";
 import { APIError } from "@d3lab/types";
 import { sleep, saveCodeFiles, lodeCodeFiles, srcStrip } from "@d3lab/utils";
+import {getAssetLoc} from "@d3lab/models/cosm"
 
 const cosminit = async (req: Request, res: Response, next: NextFunction) => {
     const uid = getUid(req);
@@ -130,4 +131,14 @@ const cosmLoadCodes = async (
     }
 };
 
-export { cosminit, cosmBuild, cosmLoadCodes };
+const getLessonPicture = async(req: Request, res: Response, next: NextFunction) => {
+    let assetSuffix = await getAssetLoc(req)
+    if (assetSuffix instanceof Error) {
+        next(assetSuffix)
+    } else {
+        const assetPath = path.join(process.cwd(), assetSuffix)
+        res.sendFile(assetPath)
+    }
+}
+
+export { cosminit, cosmBuild, cosmLoadCodes, getLessonPicture };

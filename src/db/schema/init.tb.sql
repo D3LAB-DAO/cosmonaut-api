@@ -6,7 +6,7 @@ CREATE TABLE federated_credentials(
    UNIQUE (provider, subject)
 );
 INSERT INTO federated_credentials(provider, subject)
-VALUES('google', 'dummy');
+VALUES('github', '41176085');
 
 CREATE TABLE users(
    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -21,7 +21,7 @@ CREATE TABLE users(
          REFERENCES federated_credentials(provider, subject) ON DELETE CASCADE
 );
 INSERT INTO users(provider, subject, lesson, chapter)
-VALUES('google', 'dummy', 1, 1);
+VALUES('github', '41176085', 1, 1);
 
 -- CREATE TABLE assets(
 --    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -41,12 +41,15 @@ CREATE TABLE assets(
    lesson INTEGER NOT NULL,
    status TEXT NOT NULL,
    loc TEXT NOT NULL,
+   UNIQUE(provider, subject, lesson),
    CONSTRAINT fk_unique_user
       FOREIGN KEY(provider, subject)
          REFERENCES federated_credentials(provider, subject) ON DELETE CASCADE
 );
 INSERT INTO assets (provider, subject, lesson, status, loc)
-VALUES('google', 'dummy', 1, 'doing', '/path/to/jpg');
+VALUES('github', '41176085', 1, 'done', 'assets/f03b9b48acf40d25882e7afc0a64573358ca5e9d15a0d343e657ba04b81c44ea-1/done.jpg'),
+      ('github', '41176085', 2, 'doing', 'assets/2bf83c540ee563217f2c18e26ce2660a8302f28105c2328d27aa7eef7e0dca3b-2/doing.png'),
+      ('github', '41176085', 3, 'start', 'assets/8da88b2d24e891496a3a921d47d873d34de670bd3eb8215222c97d6a63f597f5-3/start.png');
 
 CREATE TABLE lesson_range(
    lesson INTEGER NOT NULL,
