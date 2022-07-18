@@ -5,7 +5,6 @@ import { rust, cosm, getUid } from "@d3lab/services";
 import { RustFiles, APIError } from "@d3lab/types";
 import conf from "@d3lab/config";
 import {saveCodeFiles, srcStrip} from '@d3lab/utils'
-import {checkLessonRange} from '@d3lab/models/cosm'
 
 const fmtCodes = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -37,7 +36,7 @@ const clippy = async (req: Request, res: Response, next: NextFunction) => {
     try {
         uid = getUid(req);
         cosm.checkTarget(lesson, chapter);
-        await checkLessonRange(lesson, chapter);
+        await cosm.checkLessonRange(lesson, chapter);
     } catch (error) {
         return next(error);
     }

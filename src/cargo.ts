@@ -12,8 +12,8 @@ global.MY_CWD = process.cwd();
 
         const prefix = 'cargo-projects/cosm'
         const userid = 'github-41176085'
-        const lesson = '1'
-        const chapter = '5'
+        const lesson = 1
+        const chapter = 5
         const projPath =  cosm.getCosmFilePath(prefix, userid, lesson, chapter, true)
         try {
             /*

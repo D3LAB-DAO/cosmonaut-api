@@ -54,6 +54,15 @@ interface expressAsyncHandler {
     ): RequestHandler<P, ResBody, ReqBody, ReqQuery>;
 }
 
+interface CosmAns {
+    answer_type: string
+    lesson: number
+    result: string
+    errors: any[]
+    differences: any[]
+}
+
+
 export {
     Base64,
     CargoReturn,
@@ -61,4 +70,5 @@ export {
     APIError,
     PassportProfile,
     expressAsyncHandler,
+    CosmAns
 };

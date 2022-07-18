@@ -6,7 +6,8 @@ CREATE TABLE federated_credentials(
    UNIQUE (provider, subject)
 );
 INSERT INTO federated_credentials(provider, subject)
-VALUES('github', '41176085');
+VALUES('github', '41176085'),
+      ('google', '123456789');
 
 CREATE TABLE users(
    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -21,7 +22,8 @@ CREATE TABLE users(
          REFERENCES federated_credentials(provider, subject) ON DELETE CASCADE
 );
 INSERT INTO users(provider, subject, lesson, chapter)
-VALUES('github', '41176085', 1, 1);
+VALUES('github', '41176085', 1, 0),
+      ('google', '123456789', 2, 3);
 
 -- CREATE TABLE assets(
 --    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,

@@ -14,13 +14,10 @@ BEGIN ATOMIC
   DO UPDATE SET chapter = newc WHERE users.provider = newp AND users.subject = news AND users.lesson = newl;
 END;
 ##
-CREATE OR REPLACE FUNCTION get_chapter(u_provider TEXT, u_subject TEXT, u_lesson INTEGER)
-RETURNS INTEGER AS $$
-DECLARE
-  cur_ch INTEGER;
+CREATE OR REPLACE FUNCTION get_progress(u_provider TEXT, u_subject TEXT, u_lesson INTEGER)
+RETURNS TABLE(res_lesson INTEGER, res_chapter INTEGER) AS $$
 BEGIN
-  SELECT chapter INTO cur_ch FROM users WHERE provider = u_provider AND subject = u_subject AND lesson = u_lesson;
-  RETURN cur_ch;
+  RETURN QUERY SELECT lesson, chapter FROM users WHERE provider = u_provider AND subject = u_subject AND lesson = u_lesson;
 END;
 $$
 IMMUTABLE

@@ -1,8 +1,6 @@
 import { Request } from "express";
-import httpStatus from "http-status";
 import { pg } from "@d3lab/db";
 import { makeLessonPicturePath } from "@d3lab/utils";
-import { APIError } from "@d3lab/types";
 
 async function getAssetLoc(req: Request): Promise<string> {
     let pgClient;
@@ -18,7 +16,7 @@ async function getAssetLoc(req: Request): Promise<string> {
         if (res.rows[0] !== undefined) {
             return res.rows[0]["loc"];
         } else {
-            throw new Error("There is no asset to load")
+            throw new Error("There is no asset to load");
         }
     } catch (error) {
         if (error instanceof Error) {
@@ -61,7 +59,53 @@ async function setAssetLoc(req: Request, status: string) {
     }
 }
 
-async function checkLessonRange(lesson: number, chapter?: number) {
+async function getProgress(
+    req: Request,
+    lesson: number
+): Promise<{ lesson: number; chapter: number }> {
+    const issuer = req.session.passport?.user.issuer;
+    const id = req.session.passport?.user.id;
+    let pgClient;
+    try {
+        pgClient = await pg.getClient();
+        const res = await pgClient.query(
+            "SELECT * FROM get_progress($1, $2, $3)",
+            [issuer, id, lesson]
+        );
+
+        const progress = res.rows[0];
+        if (progress === undefined) {
+            return { lesson, chapter: -1 };
+        } else {
+            return {lesson: res.rows[0]["res_lesson"], chapter: res.rows[0]["res_chapter"]};
+        }
+    } catch (error) {
+        throw error;
+    } finally {
+        pgClient?.release();
+    }
+}
+
+async function setProgress(req: Request, lesson: number, chapter: number) {
+    const issuer = req.session.passport?.user.issuer;
+    const id = req.session.passport?.user.id;
+    let pgClient;
+    try {
+        pgClient = await pg.getClient();
+        await pgClient.query("CALL update_lesson($1, $2, $3, $4)", [
+            issuer,
+            id,
+            lesson,
+            chapter,
+        ]);
+    } catch (error) {
+        console.error(error);
+    } finally {
+        pgClient?.release();
+    }
+}
+
+async function getChapterThreshold(lesson: number): Promise<number|undefined> {
     let pgClient;
     try {
         pgClient = await pg.getClient();
@@ -69,50 +113,9 @@ async function checkLessonRange(lesson: number, chapter?: number) {
             "SELECT threshold FROM lesson_range WHERE lesson = $1",
             [lesson]
         );
-        if (res.rows[0] === undefined) {
-            throw new APIError(
-                httpStatus.BAD_REQUEST,
-                "This lesson does not exist."
-            );
-        }
-
-        if (chapter !== undefined) {
-            if (!(res.rows[0]["threshold"] >= chapter && chapter > 0)) {
-                throw new APIError(
-                    httpStatus.BAD_REQUEST,
-                    "This chapter does not exist."
-                );
-            }
-        }
+        return res.rows[0]['threshold']
     } catch (error) {
-        if (error instanceof APIError) {
-            throw error;
-        } else {
-            console.error(error);
-        }
-    } finally {
-        pgClient?.release();
-    }
-}
-
-async function getProgress(
-    lesson: number
-): Promise<{ lesson: number; chapter: number }> {
-    let pgClient;
-    try {
-        pgClient = await pg.getClient();
-        const res = await pgClient.query(
-            "SELECT lesson, chapter FROM users WHERE lesson = $1",
-            [lesson]
-        );
-        const progress = res.rows[0];
-        if (progress === undefined) {
-            return { lesson, chapter: -1 };
-        } else {
-            return res.rows[0];
-        }
-    } catch (error) {
-        throw error;
+        console.error(error);
     } finally {
         pgClient?.release();
     }
@@ -129,4 +132,4 @@ async function getProgress(
 //     }
 // }
 
-export { getAssetLoc, setAssetLoc, checkLessonRange, getProgress };
+export { getAssetLoc, setAssetLoc, getProgress, setProgress, getChapterThreshold };

@@ -3,7 +3,7 @@ import path from "path";
 import { Request, Response, NextFunction } from "express";
 import httpStatus from "http-status";
 import { cosm, getUid } from "@d3lab/services";
-import { APIError } from "@d3lab/types";
+import { APIError, CosmAns } from "@d3lab/types";
 import {
     sleep,
     saveCodeFiles,
@@ -14,8 +14,9 @@ import {
 import {
     getAssetLoc,
     setAssetLoc,
-    checkLessonRange,
     getProgress,
+    setProgress,
+    getChapterThreshold,
 } from "@d3lab/models/cosm";
 
 const cosminit = async (req: Request, res: Response, next: NextFunction) => {
@@ -25,7 +26,8 @@ const cosminit = async (req: Request, res: Response, next: NextFunction) => {
     try {
         uid = getUid(req);
         cosm.checkTarget(lesson, chapter);
-        await checkLessonRange(lesson, chapter);
+        await cosm.checkLessonRange(lesson, chapter);
+        await cosm.checkProjOrder(req, lesson, chapter);
     } catch (error) {
         return next(error);
     }
@@ -47,6 +49,7 @@ const cosminit = async (req: Request, res: Response, next: NextFunction) => {
         );
         await sleep(1000);
         if (existsSync(genfilePath)) {
+            await setProgress(req, lesson, chapter);
             if (chapter === 1) {
                 await setAssetLoc(req, "start");
             } else {
@@ -70,10 +73,11 @@ const cosmBuild = async (req: Request, res: Response, next: NextFunction) => {
     let uid;
     const lesson = Number(req.body.lesson);
     const chapter = Number(req.body.chapter);
+
     try {
         uid = getUid(req);
         cosm.checkTarget(lesson, chapter);
-        await checkLessonRange(lesson, chapter);
+        await cosm.checkLessonRange(lesson, chapter);
     } catch (error) {
         return next(error);
     }
@@ -86,19 +90,29 @@ const cosmBuild = async (req: Request, res: Response, next: NextFunction) => {
         true
     );
     if (!existsSync(srcpath)) {
-        next(new Error("This chapter does not exist on you"));
+        return next(new Error("This chapter does not exist on you"));
     }
     await saveCodeFiles(req.body["files"], srcpath);
 
     const dirpath = srcStrip(srcpath);
     try {
         const data = await cosm.Run("cosm-build", dirpath);
+        // const parsedData: CosmAns = JSON.parse(data)
+        // if (parsedData.result === "success") {
+        //     const threshold = await getChapterThreshold(lesson)
+        //     if (chapter === threshold) {
+        //         setAssetLoc(req, "done");
+        //         await setProgress(req, lesson, 0);
+        //     } else {
+        //         await setProgress(req, lesson, chapter);
+        //     }
+        // }
 
         if (true) {
-            setAssetLoc(req, "done");
+            await setProgress(req, lesson, chapter);
         }
 
-        res.json({ answer: data });
+        res.json({ data });
     } catch (err) {
         if (typeof err === "string") {
             return next(new APIError(httpStatus.BAD_REQUEST, err));
@@ -117,7 +131,7 @@ const cosmLoadCodes = async (
     try {
         uid = getUid(req);
         cosm.checkTarget(lesson, chapter);
-        await checkLessonRange(lesson, chapter);
+        await cosm.checkLessonRange(lesson, chapter);
     } catch (error) {
         return next(error);
     }
@@ -139,7 +153,7 @@ const cosmLoadCodes = async (
 
 const getLessonPicture = asyncUtil(async (req, res, next) => {
     const lesson = Number(req.query.lesson);
-    await checkLessonRange(lesson);
+    await cosm.checkLessonRange(lesson);
     let assetSuffix = await getAssetLoc(req);
     const assetPath = path.join(process.cwd(), assetSuffix);
     res.sendFile(assetPath);
@@ -147,8 +161,8 @@ const getLessonPicture = asyncUtil(async (req, res, next) => {
 
 const userProgress = asyncUtil(async (req, res, next) => {
     const lesson = Number(req.query.lesson);
-    await checkLessonRange(lesson);
-    const p = await getProgress(lesson);
+    await cosm.checkLessonRange(lesson);
+    const p = await getProgress(req, lesson);
     res.json(p);
 });
 
