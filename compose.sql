@@ -6,7 +6,8 @@ CREATE TABLE federated_credentials(
    UNIQUE (provider, subject)
 );
 INSERT INTO federated_credentials(provider, subject)
-VALUES('github', '41176085');
+VALUES('github', '41176085'),
+      ('google', '123456789');
 
 CREATE TABLE users(
    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -21,7 +22,8 @@ CREATE TABLE users(
          REFERENCES federated_credentials(provider, subject) ON DELETE CASCADE
 );
 INSERT INTO users(provider, subject, lesson, chapter)
-VALUES('github', '41176085', 1, 1);
+VALUES('github', '41176085', 1, 0),
+      ('google', '123456789', 2, 3);
 
 CREATE TABLE assets(
    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -30,7 +32,7 @@ CREATE TABLE assets(
    lesson INTEGER NOT NULL,
    status TEXT NOT NULL,
    loc TEXT NOT NULL,
-   UNIQUE(provider, subject, lesson),
+   CONSTRAINT unique_asset UNIQUE(provider, subject, lesson),
    CONSTRAINT fk_unique_user
       FOREIGN KEY(provider, subject)
          REFERENCES federated_credentials(provider, subject) ON DELETE CASCADE
@@ -46,9 +48,7 @@ CREATE TABLE lesson_range(
    PRIMARY KEY (lesson)
 );
 INSERT INTO lesson_range (lesson, threshold)
-VALUES(1, 5),(2, 5),(3, 5),(4, 5);
-INSERT INTO lesson_range (lesson, threshold)
-VALUES(1, 5),(2, 5),(3, 5),(4, 5);
+VALUES(0, 5),(1, 5),(2, 5),(3, 5),(4, 5),(5, 5);
 
 CREATE OR REPLACE PROCEDURE update_asset(newp TEXT, news TEXT, newl INTEGER, new_status TEXT, new_loc TEXT)
 LANGUAGE SQL
@@ -66,13 +66,10 @@ BEGIN ATOMIC
   DO UPDATE SET chapter = newc WHERE users.provider = newp AND users.subject = news AND users.lesson = newl;
 END;
 
-CREATE OR REPLACE FUNCTION get_chapter(u_provider TEXT, u_subject TEXT, u_lesson INTEGER)
-RETURNS INTEGER AS $$
-DECLARE
-  cur_ch INTEGER;
+CREATE OR REPLACE FUNCTION get_progress(u_provider TEXT, u_subject TEXT, u_lesson INTEGER)
+RETURNS TABLE(res_lesson INTEGER, res_chapter INTEGER) AS $$
 BEGIN
-  SELECT chapter INTO cur_ch FROM users WHERE provider = u_provider AND subject = u_subject AND lesson = u_lesson;
-  RETURN cur_ch;
+  RETURN QUERY SELECT lesson, chapter FROM users WHERE provider = u_provider AND subject = u_subject AND lesson = u_lesson;
 END;
 $$
 IMMUTABLE
