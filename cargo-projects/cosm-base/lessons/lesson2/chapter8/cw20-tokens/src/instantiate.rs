@@ -5,7 +5,7 @@ use cosmwasm_std::{Addr, Uint128};
 use cw20::{Cw20Coin, MinterResponse};
 use cw_multi_test::BasicApp;
 
-// function to generate cw20-tokens contracts
+// function to generate cw20-helper contracts
 pub fn instantiate_cw20_contract(
     app: &mut BasicApp,
     code_id: u64,

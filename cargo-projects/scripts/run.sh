@@ -12,8 +12,8 @@ USER_CONTRACT_DIR=${BASE_DIR}/cosm/${USER_ID}/lesson${WHICH_LESSON}/chapter${WHI
 if [ -d $USER_CONTRACT_DIR ]; then 
   docker run --rm \
     -v cosmonaut-api_cosmproj:$BASE_DIR \
-    -e BASE_VOLUME_DIR=$BASE_VOLUME_DIR \
-    cosmonaut-contract:1.0.0 cargo run --manifest-path ${USER_CONTRACT_DIR}/Cargo.toml $WHICH_LESSON $WHICH_CHAPTER
+    -w /workspace/cargo-projects/cosm/$USER_ID/lesson${WHICH_LESSON}/chapter${WHICH_CHAPTER}
+    cosmonaut-contract:1.0.0 cargo run
 else
   echo "contract not found"
 fi

@@ -14,7 +14,6 @@ if [ -d $SKELETON_PATH ]; then
     mkdir -p ${USER_CONTRACT_PATH}
     cp -r ${SKELETON_PATH} ${USER_CONTRACT_PATH}
     cp -r ${BASE_PATH}/lessons/lesson${WHICH_LESSON}/chapter${WHICH_CHAPTER}/* ${USER_CONTRACT_PATH}
-    cp -r ${BASE_PATH}/packages ${USER_CONTRACT_PATH}
 else
     echo "Lesson or chapter not found"
 fi
