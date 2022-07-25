@@ -1,0 +1,114 @@
+{
+  "responses": [
+    {
+      "MinterResponse": {
+        "minter": "wasm111rvne2lz6funpxxkk6yumc8ll4l3c2e3kk111"
+      }
+    },
+    {
+      "ApprovalResponse": {
+        "approval": {
+          "spender": "wasm111rvne2lz6funpxxkk6yumc8ll4l3c2e3kk111",
+          "expires": {
+            "never": {}
+          }
+        }
+      }
+    },
+    {
+      "ApprovalsResponse": {
+        "approvals": [
+          {
+            "spender": "wasm333rvne2lz6funpxxkk6yumc8ll4l3c2e3kk333",
+            "expires": {
+              "never": {}
+            }
+          }
+        ]
+      }
+    },
+    {
+      "NftInfoResponse": {
+        "token_uri": null,
+        "extension": {
+          "unit_denom": "mars",
+          "price": "500",
+          "name": "cosmonaut spaceship1",
+          "freights": [
+            {
+              "denom": "oil",
+              "amount": "5000",
+              "unit_weight": "1"
+            }
+          ],
+          "health": "5",
+          "fuel": "50"
+        }
+      }
+    },
+    {
+      "AllNftInfoResponse": {
+        "access": {
+          "owner": "wasm111rvne2lz6funpxxkk6yumc8ll4l3c2e3kk111",
+          "approvals": [
+            {
+              "spender": "wasm333rvne2lz6funpxxkk6yumc8ll4l3c2e3kk333",
+              "expires": {
+                "never": {}
+              }
+            }
+          ]
+        },
+        "info": {
+          "token_uri": null,
+          "extension": {
+            "unit_denom": "mars",
+            "price": "500",
+            "name": "cosmonaut spaceship1",
+            "freights": [
+              {
+                "denom": "oil",
+                "amount": "5000",
+                "unit_weight": "1"
+              }
+            ],
+            "health": "5",
+            "fuel": "50"
+          }
+        }
+      }
+    },
+    {
+      "OwnerOfResponse": {
+        "owner": "wasm111rvne2lz6funpxxkk6yumc8ll4l3c2e3kk111",
+        "approvals": [
+          {
+            "spender": "wasm333rvne2lz6funpxxkk6yumc8ll4l3c2e3kk333",
+            "expires": {
+              "never": {}
+            }
+          }
+        ]
+      }
+    },
+    {
+      "NumTokensResponse": {
+        "count": 2
+      }
+    },
+    {
+      "TokensResponse": {
+        "tokens": [
+          "2"
+        ]
+      }
+    },
+    {
+      "ContractInfoResponse": {
+        "name": "spaceship",
+        "symbol": "space"
+      }
+    }
+  ],
+  "errors": []
+}
