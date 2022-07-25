@@ -1,10 +1,23 @@
 .PHONY: rust-build clippy clean rust-init cargofmt rustfmt
 
-DOCKER_IMG ?="cosmo-rust:1.0"
-TARGET_PATH =
-SAVE_PATH ?="cargo-projects"
 
-COMPOSE_MAIN ?= "cosmonaut-api-1"
+TARGET_PATH =
+
+USER_ID =
+LESSON =
+CHAPTER =
+COSM_ROOT = "/workspace/cargo-projects"
+COSM_LIB = "cosm-base"
+SKELETON_PATH = "skeleton/lesson${LESSON}/chapter${CHAPTER}/contracts"
+RUNNER_PATH = "lessons/lesson$(LESSON)/chapter$(CHAPTER)"
+USER_CONTRACT_PATH = "cosm/${USER_ID}/lesson${LESSON}/chapter${CHAPTER}"
+
+# For local machine
+DOCKER_IMG ?="cosmo-rust:1.0"
+SAVE_ROOT ?="$(CURDIR)/cargo-projects"
+
+# For Docker Compose
+COMPOSE_MAIN ?= "cosmonaut-1"
 COMPOSE_COSM_IMG ?= "cosmo-rust:dind"
 
 .PHONY: test
@@ -18,63 +31,55 @@ endif
 
 cosm-init:
 ifeq (${COMPOSE},true)
-	@docker run -d --rm --volumes-from $(COMPOSE_MAIN) -w /workspace $(COMPOSE_COSM_IMG) \
-	bash -c "cd $(SAVE_PATH) && ./scripts/init.sh --path $(TARGET_PATH) --clean"
+	@mkdir -p $(COSM_ROOT)/$(USER_CONTRACT_PATH)
+	@cp -r $(COSM_ROOT)/$(COSM_LIB)/$(SKELETON_PATH) $(COSM_ROOT)/$(USER_CONTRACT_PATH)
+	@cp -r $(COSM_ROOT)/$(COSM_LIB)/$(RUNNER_PATH)/* $(COSM_ROOT)/$(USER_CONTRACT_PATH)/
 else
-	@docker run -d --rm -v $(CURDIR)/$(SAVE_PATH):/workspace -w /workspace $(DOCKER_IMG) \
-	bash -c "./scripts/init.sh --path $(TARGET_PATH) --clean"
+	@mkdir -p $(SAVE_ROOT)/$(USER_CONTRACT_PATH)
+	@cp -r $(SAVE_ROOT)/$(COSM_LIB)/$(SKELETON_PATH) $(SAVE_ROOT)/$(USER_CONTRACT_PATH)
+	@cp -r $(SAVE_ROOT)/$(COSM_LIB)/$(RUNNER_PATH)/* $(SAVE_ROOT)/$(USER_CONTRACT_PATH)/
 endif
 
 cargofmt:
 ifeq (${COMPOSE},true)
-	@docker run -d --rm --volumes-from $(COMPOSE_MAIN) -w $(TARGET_PATH) $(COMPOSE_COSM_IMG) \
+	@docker run --rm -a stderr -a stdout \
+	--volumes-from $(COMPOSE_MAIN) -v $(COSM_ROOT)/$(COSM_LIB)/$(COSM_ROOT)/$(COSM_LIB) \
+	-w $(TARGET_PATH) $(COMPOSE_COSM_IMG) \
 	bash -c "cargo fmt"
 else
-	@docker run -d --rm -v $(TARGET_PATH):/workspace -w /workspace $(DOCKER_IMG) \
+	@docker run -d --rm -v $(SAVE_ROOT):$(COSM_ROOT) -w $(TARGET_PATH) $(DOCKER_IMG) \
 	bash -c "cargo fmt
 endif
 
 cosm-build:
 ifeq (${COMPOSE},true)
-	@docker run --rm -a stderr -a stdout --volumes-from $(COMPOSE_MAIN) -w $(TARGET_PATH) $(COMPOSE_COSM_IMG) \
+	@docker run --rm -a stderr -a stdout \
+	--volumes-from $(COMPOSE_MAIN) -v $(COSM_ROOT)/$(COSM_LIB)/$(COSM_ROOT)/$(COSM_LIB) \
+	-w $(TARGET_PATH) $(COMPOSE_COSM_IMG) \
 	bash -c "cargo run"
 else
-	@docker run --rm -a stderr -a stdout -v $(TARGET_PATH):/workspace -w /workspace $(DOCKER_IMG) \
+	@docker run --rm -a stderr -a stdout -v $(SAVE_ROOT):$(COSM_ROOT) -w $(TARGET_PATH) $(DOCKER_IMG) \
 	bash -c "cargo run"
 endif
 
 cosm-clean:
 ifeq (${COMPOSE},true)
-	@docker run -d --rm --volumes-from $(COMPOSE_MAIN) -w $(TARGET_PATH) $(COMPOSE_COSM_IMG) \
+	@docker run --rm -a stderr -a stdout \
+	--volumes-from $(COMPOSE_MAIN) -v $(COSM_ROOT)/$(COSM_LIB)/$(COSM_ROOT)/$(COSM_LIB) \
+	-w $(TARGET_PATH) $(COMPOSE_COSM_IMG) \
 	bash -c "cargo clean"
 else
-	@docker run -d --rm -v $(TARGET_PATH):/workspace -w /workspace $(DOCKER_IMG) \
+	@docker run -d --rm -v $(SAVE_ROOT):$(COSM_ROOT) -w $(TARGET_PATH) $(DOCKER_IMG) \
 	bash -c "cargo clean"
 endif
 
 clippy:
 ifeq (${COMPOSE},true)
-	@docker run --rm -a stderr -a stdout --volumes-from $(COMPOSE_MAIN) -w $(TARGET_PATH) $(COMPOSE_COSM_IMG) \
+	@docker run --rm -a stderr -a stdout \
+	--volumes-from $(COMPOSE_MAIN) -v $(COSM_ROOT)/$(COSM_LIB)/$(COSM_ROOT)/$(COSM_LIB) \
+	-w $(TARGET_PATH) $(COMPOSE_COSM_IMG) \
 	bash -c "cargo clippy 2>&1"
 else
-	@docker run --rm -a stderr -a stdout -v $(TARGET_PATH):/workspace -w /workspace $(DOCKER_IMG) \
+	@docker run --rm -a stderr -a stdout -v $(SAVE_ROOT):$(COSM_ROOT) -w $(TARGET_PATH) $(DOCKER_IMG) \
 	bash -c "cargo clippy 2>&1"
-endif
-
-skeleton-init:
-ifeq (${COMPOSE},true)
-	@docker run -d --rm --volumes-from $(COMPOSE_MAIN) -w /workspace $(COMPOSE_COSM_IMG) \
-	bash -c "cd $(SAVE_PATH) && ./scripts/init_skeleton.sh ${USER_ID} ${WHICH_LESSON} ${WHICH_CHAPTER}
-else
-	@docker run -d --rm -v $(CURDIR)/$(SAVE_PATH):/workspace -w /workspace $(DOCKER_IMG) \
-	bash -c "./scripts/init_skeleton.sh ${USER_ID} ${WHICH_LESSON} ${WHICH_CHAPTER}
-endif
-
-run-contract:
-ifeq (${COMPOSE},true)
-	@docker run -d --rm --volumes-from $(COMPOSE_MAIN) -w /workspace $(COMPOSE_COSM_IMG) \
-	bash -c "cd $(SAVE_PATH) && ./scripts/run.sh ${USER_ID} ${WHICH_LESSON} ${WHICH_CHAPTER}
-else
-	@docker run -d --rm -v $(CURDIR)/$(SAVE_PATH):/workspace -w /workspace $(DOCKER_IMG) \
-	bash -c "./scripts/run.sh ${USER_ID} ${WHICH_LESSON} ${WHICH_CHAPTER}
 endif

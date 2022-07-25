@@ -12,7 +12,7 @@ services:
     environment:
       - COMPOSE=true
     env_file:
-      - .env
+      - .env.dev
     ports:
       - 3334:3334
     networks:
@@ -23,7 +23,7 @@ services:
         target: /var/run/docker.sock
       - type: volume
         source: cosmproj
-        target: /workspace/cargo-projects
+        target: /workspace/cargo-projects/cosm
   redis-sess:
     image: redis
     restart: always
