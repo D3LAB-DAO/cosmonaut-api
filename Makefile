@@ -1,8 +1,5 @@
 .PHONY: rust-build clippy clean rust-init cargofmt rustfmt
 
-
-TARGET_PATH =
-
 USER_ID =
 LESSON =
 CHAPTER =
@@ -11,6 +8,7 @@ COSM_LIB = "cosm-base"
 SKELETON_PATH = "skeleton/lesson${LESSON}/chapter${CHAPTER}/contracts"
 RUNNER_PATH = "lessons/lesson$(LESSON)/chapter$(CHAPTER)"
 USER_CONTRACT_PATH = "cosm/${USER_ID}/lesson${LESSON}/chapter${CHAPTER}"
+TARGET_PATH = "$(COSM_ROOT)/$(USER_CONTRACT_PATH)"
 
 # For local machine
 DOCKER_IMG ?="cosmo-rust:1.0"
